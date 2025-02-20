@@ -1,5 +1,6 @@
 import  { useState } from 'react';
 import PropTypes from 'prop-types';
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const PasswordInput = ({ value, onChange, placeholder }) => {
     const [isShowPassword, setIsShowPassword] = useState(false);
@@ -22,8 +23,18 @@ const PasswordInput = ({ value, onChange, placeholder }) => {
                 onClick={toggleShowPassword}
                 className="text-sm text-blue-500 hover:text-blue-700 focus:outline-none"
             >
-                {isShowPassword ? "Hide" : "Show"}
+                {/* {isShowPassword ? "Hide" : "Show"} */}
             </button>
+
+            {isShowPassword ? <FaEye
+            size={22}
+            className="text-blue-600 cursor-pointer"
+            onClick={() => toggleShowPassword()}
+            /> : <FaEyeSlash
+            size={22}
+            className="text-grey cursor-pointer"
+            onClick={() => toggleShowPassword()}
+            />}
         </div>
     );
 };
