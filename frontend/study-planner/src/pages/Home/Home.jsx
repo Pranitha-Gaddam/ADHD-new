@@ -2,7 +2,7 @@ import "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd } from "react-icons/md";
-import AddEditNotes from "./AddEditNotes";
+import AddEditTasks from "./AddEditTasks";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ const Home = () => {
     data: null,
   });
 
+  const [allTasks, setAllTasks] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
 
   const navigate = useNavigate();
@@ -34,7 +35,20 @@ const Home = () => {
     }
   };
 
+  // Get all tasks
+  const getAllTasks = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-tasks");
+
+      if (response.data && response.data.tasks) {
+        setAllTasks(response.data.tasks);
+      }
+    } catch {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
   useEffect(() => {
+    getAllTasks();
     getUserInfo();
     return () => {};
   }, []);
@@ -45,46 +59,19 @@ const Home = () => {
 
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <NoteCard
-            title="Meeting on 7th April"
-            date="3rd Apr 2024"
-            content="Meeting on 7th April"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
-          <NoteCard
-            title="Meeting on 7th April"
-            date="3rd Apr 2024"
-            content="Meeting on 7th April"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
-          <NoteCard
-            title="Meeting on 7th April"
-            date="3rd Apr 2024"
-            content="Meeting on 7th April"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
-          <NoteCard
-            title="Meeting on 7th April"
-            date="3rd Apr 2024"
-            content="Meeting on 7th April"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {allTasks.map((item, index) => (
+            <NoteCard
+              key={item._id}
+              title={item.title}
+              date={item.createdOn}
+              content={item.content}
+              tags={item.tags}
+              isPinned={item.isPinned}
+              onEdit={() => {}}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+          ))}
         </div>
       </div>
       <button
@@ -107,12 +94,13 @@ const Home = () => {
         contentLabel=""
         className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow:scroll"
       >
-        <AddEditNotes
+        <AddEditTasks
           type={openAddEditModal.type}
           noteData={openAddEditModal.data}
           onClose={() => {
             setOpenAddEditModal({ isShown: false, type: "add", data: null });
           }}
+          getAllTasks={getAllTasks}
         />
       </Modal>
     </>

@@ -1,36 +1,79 @@
-import "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import TagInput from "../../components/Input/TagInput";
-import { useState } from "react";
 import { MdClose } from "react-icons/md";
-const AddEditNotes = ({ noteData, type, onClose }) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState([]);
+import axiosInstance from "../../utils/axiosInstance";
+
+const AddEditTasks = ({ noteData, type, getAllTasks, onClose }) => {
+  const [title, setTitle] = useState(noteData?.title || "");
+  const [content, setContent] = useState(noteData?.content || "");
+  const [tags, setTags] = useState(noteData?.tags || []);
 
   const [error, setError] = useState(null);
 
-  // Add Note
-  const addNewNote = async () => {};
+  // Add Task
+  const addNewTask = async () => {
+    try {
+      const response = await axiosInstance.post("/add-task", {
+        title: title,
+        content: content,
+        tags: tags,
+      });
 
-  // Edit Note
-  const editNote = async () => {};
+      if (response.data && response.data.task) {
+        getAllTasks();
+        onClose();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      }
+    }
+  };
 
-  const handleAddNote = () => {
+  // Edit Task
+  const editTask = async () => {
+    try {
+      const response = await axiosInstance.put(`/edit-task/${noteData._id}`, {
+        title: title,
+        content: content,
+        tags: tags,
+      });
+
+      if (response.data && response.data.task) {
+        getAllTasks();
+        onClose();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      }
+    }
+  };
+
+  const handleAddTask = () => {
     if (!title) {
       setError("Please enter a title");
       return;
     }
     if (!content) {
-      setError("Please enter a content");
+      setError("Please enter content");
       return;
     }
     setError("");
 
     if (type === "edit") {
-      editNote();
+      editTask();
     } else {
-      addNewNote();
+      addNewTask();
     }
   };
 
@@ -73,17 +116,19 @@ const AddEditNotes = ({ noteData, type, onClose }) => {
 
       <button
         className="btn-primary font-media mt-5 p-3"
-        onClick={handleAddNote}
+        onClick={handleAddTask}
       >
-        ADD
+        {type === "edit" ? "EDIT" : "ADD"}
       </button>
     </div>
   );
 };
-AddEditNotes.propTypes = {
+
+AddEditTasks.propTypes = {
   noteData: PropTypes.object,
   type: PropTypes.string,
+  getAllTasks: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export default AddEditNotes;
+export default AddEditTasks;
