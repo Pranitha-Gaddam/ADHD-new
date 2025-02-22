@@ -4,7 +4,13 @@ import TagInput from "../../components/Input/TagInput";
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
 
-const AddEditTasks = ({ noteData, type, getAllTasks, onClose }) => {
+const AddEditTasks = ({
+  noteData,
+  type,
+  getAllTasks,
+  onClose,
+  showToastMessage,
+}) => {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
   const [tags, setTags] = useState(noteData?.tags || []);
@@ -21,6 +27,7 @@ const AddEditTasks = ({ noteData, type, getAllTasks, onClose }) => {
       });
 
       if (response.data && response.data.task) {
+        showToastMessage("Task added successfully");
         getAllTasks();
         onClose();
       }
@@ -45,6 +52,7 @@ const AddEditTasks = ({ noteData, type, getAllTasks, onClose }) => {
       });
 
       if (response.data && response.data.task) {
+        showToastMessage("Task Updated Successfully");
         getAllTasks();
         onClose();
       }
@@ -118,7 +126,7 @@ const AddEditTasks = ({ noteData, type, getAllTasks, onClose }) => {
         className="btn-primary font-media mt-5 p-3"
         onClick={handleAddTask}
       >
-        {type === "edit" ? "EDIT" : "ADD"}
+        {type === "edit" ? "UPDATE" : "ADD"}
       </button>
     </div>
   );
@@ -129,6 +137,7 @@ AddEditTasks.propTypes = {
   type: PropTypes.string,
   getAllTasks: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  showToastMessage: PropTypes.func.isRequired,
 };
 
 export default AddEditTasks;
