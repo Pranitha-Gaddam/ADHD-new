@@ -1,10 +1,9 @@
-import "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd } from "react-icons/md";
 import AddEditTasks from "./AddEditTasks";
 import Modal from "react-modal";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
@@ -19,7 +18,7 @@ const Home = () => {
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     type: "add",
-    data: null,
+    message: "",
   });
 
   const [allTasks, setAllTasks] = useState([]);
@@ -66,6 +65,27 @@ const Home = () => {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
+
+  // Delete task
+  const deleteTask = async (data) => {
+    try {
+      const response = await axiosInstance.delete(`/delete-task/${data._id}`);
+
+      if (response.data && !response.data.error) {
+        showToastMessage("Task Deleted Successfully", "delete");
+        getAllTasks();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        console.log("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
     getAllTasks();
     getUserInfo();
@@ -87,7 +107,7 @@ const Home = () => {
               tags={item.tags}
               isPinned={item.isPinned}
               onEdit={() => handleEdit(item)}
-              onDelete={() => {}}
+              onDelete={() => deleteTask(item)}
               onPinNote={() => {}}
             />
           ))}
@@ -104,14 +124,16 @@ const Home = () => {
 
       <Modal
         isOpen={openAddEditModal.isShown}
-        onRequestClose={() => {}}
+        onRequestClose={() => {
+          setOpenAddEditModal({ isShown: false, type: "add", data: null });
+        }}
         style={{
           overlay: {
             backgroundColor: "rgba(0,0,0,0.2)",
           },
         }}
         contentLabel=""
-        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow:scroll"
+        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow-scroll"
       >
         <AddEditTasks
           type={openAddEditModal.type}
