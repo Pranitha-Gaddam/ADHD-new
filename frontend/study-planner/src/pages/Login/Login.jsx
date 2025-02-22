@@ -51,7 +51,7 @@ const Login = () => {
       ) {
         setError(error.response.data.message);
       } else {
-        setError("Something went wrong. Please try again later.");
+        setError("An unxpected error occured. Please try again later.");
       }
     }
   };
