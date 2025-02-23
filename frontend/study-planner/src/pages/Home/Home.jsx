@@ -7,6 +7,8 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
+import EmptyCard from "../../components/EmptyCard/EmptyCard";
+import AddTaskImg from "../../assets/images/add_task.svg";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -24,6 +26,7 @@ const Home = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
 
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
@@ -86,6 +89,27 @@ const Home = () => {
     }
   };
 
+  // Search for tasks
+  const onSearchTask = async (query) => {
+    try {
+      const response = await axiosInstance.get("/search-tasks", {
+        params: { query },
+      });
+
+      if (response.data && response.data.tasks) {
+        setIsSearch(true);
+        setAllTasks(response.data.tasks);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleclearSearch = () => {
+    setIsSearch(false);
+    getAllTasks();
+  };
+
   useEffect(() => {
     getAllTasks();
     getUserInfo();
@@ -94,24 +118,35 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar
+        userInfo={userInfo}
+        onSearchTask={onSearchTask}
+        handleclearSearch={handleclearSearch}
+      />
 
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 gap-4 mt-8">
-          {allTasks.map((item, index) => (
-            <NoteCard
-              key={item._id}
-              title={item.title}
-              date={item.createdOn}
-              content={item.content}
-              tags={item.tags}
-              isPinned={item.isPinned}
-              onEdit={() => handleEdit(item)}
-              onDelete={() => deleteTask(item)}
-              onPinNote={() => {}}
-            />
-          ))}
-        </div>
+        {allTasks.length > 0 ? (
+          <div className="grid grid-cols-3 gap-4 mt-8">
+            {allTasks.map((item, index) => (
+              <NoteCard
+                key={item._id}
+                title={item.title}
+                date={item.createdOn}
+                content={item.content}
+                tags={item.tags}
+                isPinned={item.isPinned}
+                onEdit={() => handleEdit(item)}
+                onDelete={() => deleteTask(item)}
+                onPinNote={() => {}}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyCard
+            imgSrc={AddTaskImg}
+            message={`Let’s get things rolling! Click ‘Add’ to create your first task—whether it’s big or small, every step counts!`}
+          />
+        )}
       </div>
       <button
         className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500 hover:bg-blue-600 absolute right-10 bottom-10"

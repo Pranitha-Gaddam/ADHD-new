@@ -1,11 +1,10 @@
-import "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ProfileInfo from "../Cards/ProfileInfo";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
-import { useState } from "react";
 
-const Navbar = ({ userInfo }) => {
+const Navbar = ({ userInfo, onSearchTask, handleclearSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
@@ -16,11 +15,17 @@ const Navbar = ({ userInfo }) => {
     navigate("/login");
   };
 
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    if (searchQuery) {
+      onSearchTask(searchQuery);
+    }
+  };
 
   const onClearSearch = () => {
     setSearchQuery("");
+    handleclearSearch();
   };
+
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
       <h2 className="text-xl font-medium text-black py-2">Study Planner</h2>
@@ -38,8 +43,10 @@ const Navbar = ({ userInfo }) => {
     </div>
   );
 };
+
 Navbar.propTypes = {
   userInfo: PropTypes.object.isRequired,
+  onSearchTask: PropTypes.func.isRequired,
 };
 
 export default Navbar;
