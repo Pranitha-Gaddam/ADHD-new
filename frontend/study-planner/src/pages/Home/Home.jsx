@@ -9,6 +9,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
 import AddTaskImg from "../../assets/images/add_task.svg";
+import NoDataImg from "../../assets/images/no_task.svg";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -143,8 +144,12 @@ const Home = () => {
           </div>
         ) : (
           <EmptyCard
-            imgSrc={AddTaskImg}
-            message={`Let’s get things rolling! Click ‘Add’ to create your first task—whether it’s big or small, every step counts!`}
+            imgSrc={isSearch ? NoDataImg : AddTaskImg}
+            message={
+              isSearch
+                ? `Oops! No tasks found matching your search.`
+                : `Let’s get things rolling! Click ‘Add’ to create your first task—whether it’s big or small, every step counts!`
+            }
           />
         )}
       </div>
