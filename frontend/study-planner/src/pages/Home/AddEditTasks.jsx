@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import TagInput from "../../components/Input/TagInput";
 import { MdClose } from "react-icons/md";
@@ -81,6 +81,20 @@ const AddEditTasks = ({
       addNewTask();
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter") {
+        handleAddTask();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [title, content, tags]);
 
   return (
     <div className="relative">
