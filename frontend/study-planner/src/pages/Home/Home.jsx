@@ -235,14 +235,23 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500 hover:bg-blue-600 fixed right-10 bottom-10"
-        onClick={() => {
-          setOpenAddEditModal({ isShown: true, type: "add", data: null });
-        }}
-      >
-        <MdAdd className="text-white text-[32px]" />
-      </button>
+      <div className="relative">
+        <div className="relative group">
+          <button
+            className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500 hover:bg-blue-600 fixed right-10 bottom-10"
+            onClick={() => {
+              setOpenAddEditModal({ isShown: true, type: "add", data: null });
+            }}
+          >
+            <div className="relative">
+              <MdAdd className="text-white text-[32px]" />
+              <span className="absolute right-full mr-6 bottom-1 w-max opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-blue-600 text-white text-sm rounded py-1 px-2">
+                New Task
+              </span>
+            </div>
+          </button>
+        </div>
+      </div>
 
       <Modal
         isOpen={openAddEditModal.isShown}
