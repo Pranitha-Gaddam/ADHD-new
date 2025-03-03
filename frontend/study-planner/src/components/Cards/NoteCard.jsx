@@ -1,26 +1,35 @@
-import "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { MdOutlinePushPin, MdCreate, MdDelete } from "react-icons/md";
-import moment from "moment";
 
 const NoteCard = ({
   title,
-  date,
   content,
   tags,
   isPinned,
+  isCompleted,
   onEdit,
   onDelete,
   onPinNote,
+  onToggleComplete,
 }) => {
   return (
     <div className="border border-slate-300 rounded p-4 bg-white hover:shadow-xl transition-all ease-in-out">
       <div className="flex items-center justify-between">
-        <div>
-          <h6 className="text-sm font-medium">{title}</h6>
-          <span className="text-xs text-slate-500">
-            {moment(date).format("Do MMM YYYY")}
-          </span>
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            checked={isCompleted}
+            onClick={onToggleComplete}
+            className="mr-2 peer appearance h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 cursor-pointer"
+          />
+          <h6
+            className={`text-sm font-medium ${
+              isCompleted ? "line-through" : ""
+            }`}
+          >
+            {title}
+          </h6>
         </div>
         <MdOutlinePushPin
           className={`icon-btn ${
@@ -29,8 +38,9 @@ const NoteCard = ({
           onClick={onPinNote}
         />
       </div>
-      <p className="text-xs text-slate-60 mt-2">{content?.slice(0, 60)}</p>
-
+      {content && (
+        <p className="text-xs text-slate-600 mt-2">{content.slice(0, 60)}</p>
+      )}
       <div className="flex items-center justify-between mt-2">
         <div className="text-xs text-slate-500">
           {tags.map((item) => `#${item} `)}
@@ -49,15 +59,17 @@ const NoteCard = ({
     </div>
   );
 };
+
 NoteCard.propTypes = {
   title: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
   content: PropTypes.string,
-  tags: PropTypes.array,
-  isPinned: PropTypes.bool,
-  onEdit: PropTypes.func,
-  onDelete: PropTypes.func,
-  onPinNote: PropTypes.func,
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isPinned: PropTypes.bool.isRequired,
+  isCompleted: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onPinNote: PropTypes.func.isRequired,
+  onToggleComplete: PropTypes.func.isRequired,
 };
 
 export default NoteCard;

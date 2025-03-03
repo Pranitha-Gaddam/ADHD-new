@@ -72,10 +72,7 @@ const AddEditTasks = ({
       setError("Please enter a title");
       return;
     }
-    if (!content) {
-      setError("Please enter content");
-      return;
-    }
+
     setError("");
 
     if (type === "edit") {
@@ -105,7 +102,7 @@ const AddEditTasks = ({
         />
       </div>
       <div className="flex flex-col gap-2 mt-4">
-        <label className="input-label">CONTENT</label>
+        <label className="input-label">CONTENT (Optional)</label>
         <textarea
           type="text"
           className="text-sm text-slate-950 outline-none bg-slate-100 p-2 rounded"

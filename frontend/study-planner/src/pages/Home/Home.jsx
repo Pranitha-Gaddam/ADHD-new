@@ -10,6 +10,8 @@ import Toast from "../../components/ToastMessage/Toast";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
 import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import the GreetingCard component
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -125,6 +127,25 @@ const Home = () => {
     }
   };
 
+  const updateIsCompleted = async (noteData) => {
+    const taskId = noteData._id;
+    try {
+      const response = await axiosInstance.put(
+        `/update-task-completed/${taskId}`,
+        {
+          isCompleted: !noteData.isCompleted,
+        }
+      );
+
+      if (response.data && response.data.task) {
+        showToastMessage("Task Updated Successfully");
+        getAllTasks();
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const handleclearSearch = () => {
     setIsSearch(false);
     getAllTasks();
@@ -136,44 +157,86 @@ const Home = () => {
     return () => {};
   }, []);
 
+  const incompleteTasks = allTasks.filter((task) => !task.isCompleted);
+  const completedTasks = allTasks.filter((task) => task.isCompleted);
+
   return (
     <>
       <Navbar
         userInfo={userInfo}
         onSearchTask={onSearchTask}
         handleclearSearch={handleclearSearch}
+        showSearchBar={true}
       />
-
-      <div className="container mx-auto">
-        {allTasks.length > 0 ? (
-          <div className="grid grid-cols-3 gap-4 mt-8">
-            {allTasks.map((item, index) => (
-              <NoteCard
-                key={item._id}
-                title={item.title}
-                date={item.createdOn}
-                content={item.content}
-                tags={item.tags}
-                isPinned={item.isPinned}
-                onEdit={() => handleEdit(item)}
-                onDelete={() => deleteTask(item)}
-                onPinNote={() => updateIsPinned(item)}
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 container mx-auto">
+          {userInfo && <GreetingCard username={userInfo.fullName} />}{" "}
+          {/* Display the GreetingCard */}
+          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
+            <h2 className="text-2xl font-bold mb-4">My Tasks</h2>
+            {incompleteTasks.length > 0 ? (
+              <div className="flex flex-col gap-4">
+                {incompleteTasks.map((item, index) => (
+                  <NoteCard
+                    key={item._id}
+                    title={item.title}
+                    content={item.content}
+                    tags={item.tags}
+                    isPinned={item.isPinned}
+                    isCompleted={item.isCompleted}
+                    onEdit={() => handleEdit(item)}
+                    onDelete={() => deleteTask(item)}
+                    onPinNote={() => updateIsPinned(item)}
+                    onToggleComplete={() => updateIsCompleted(item)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyCard
+                imgSrc={isSearch ? NoDataImg : AddTaskImg}
+                message={
+                  isSearch
+                    ? `Oops! No tasks found matching your search.`
+                    : `Let’s get things rolling! Click ‘Add’ to create your first task—whether it’s big or small, every step counts!`
+                }
               />
-            ))}
+            )}
           </div>
-        ) : (
-          <EmptyCard
-            imgSrc={isSearch ? NoDataImg : AddTaskImg}
-            message={
-              isSearch
-                ? `Oops! No tasks found matching your search.`
-                : `Let’s get things rolling! Click ‘Add’ to create your first task—whether it’s big or small, every step counts!`
-            }
-          />
-        )}
+          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
+            <h2 className="text-2xl font-bold mb-4">Completed Tasks</h2>
+            {completedTasks.length > 0 ? (
+              <div className="flex flex-col gap-4">
+                {completedTasks.map((item, index) => (
+                  <NoteCard
+                    key={item._id}
+                    title={item.title}
+                    content={item.content}
+                    tags={item.tags}
+                    isPinned={item.isPinned}
+                    isCompleted={item.isCompleted}
+                    onEdit={() => handleEdit(item)}
+                    onDelete={() => deleteTask(item)}
+                    onPinNote={() => updateIsPinned(item)}
+                    onToggleComplete={() => updateIsCompleted(item)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyCard
+                imgSrc={isSearch ? NoDataImg : AddTaskImg}
+                message={
+                  isSearch
+                    ? `No completed tasks found.`
+                    : `Complete a task to see it here!`
+                }
+              />
+            )}
+          </div>
+        </div>
       </div>
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500 hover:bg-blue-600 absolute right-10 bottom-10"
+        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500 hover:bg-blue-600 fixed right-10 bottom-10"
         onClick={() => {
           setOpenAddEditModal({ isShown: true, type: "add", data: null });
         }}
