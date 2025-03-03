@@ -10,6 +10,7 @@ const taskSchema = new Schema({
   userId: { type: String, required: true },
   isCompleted: { type: Boolean, default: false },
   createdOn: { type: Date, default: new Date().getTime() },
+  dueDate: { type: Date, required: false },
 });
 
 module.exports = mongoose.model("Task", taskSchema);

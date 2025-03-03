@@ -183,6 +183,7 @@ const Home = () => {
                     title={item.title}
                     content={item.content}
                     tags={item.tags}
+                    dueDate={item.dueDate} // Ensure dueDate is passed here
                     isPinned={item.isPinned}
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
@@ -213,6 +214,7 @@ const Home = () => {
                     title={item.title}
                     content={item.content}
                     tags={item.tags}
+                    dueDate={item.dueDate} // Ensure dueDate is passed here
                     isPinned={item.isPinned}
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
@@ -245,7 +247,7 @@ const Home = () => {
           >
             <div className="relative">
               <MdAdd className="text-white text-[32px]" />
-              <span className="absolute right-full mr-6 bottom-1 w-max opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-blue-600 text-white text-sm rounded py-1 px-2">
+              <span className="absolute right-full mr-2 w-max opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-blue-600 text-white text-sm rounded py-1 px-2">
                 New Task
               </span>
             </div>

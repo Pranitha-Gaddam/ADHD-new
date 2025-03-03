@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import TagInput from "../../components/Input/TagInput";
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AddEditTasks = ({
   noteData,
@@ -14,6 +16,9 @@ const AddEditTasks = ({
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
   const [tags, setTags] = useState(noteData?.tags || []);
+  const [dueDate, setDueDate] = useState(
+    noteData?.dueDate ? new Date(noteData.dueDate) : null
+  );
 
   const [error, setError] = useState(null);
 
@@ -24,6 +29,7 @@ const AddEditTasks = ({
         title: title,
         content: content,
         tags: tags,
+        dueDate: dueDate,
       });
 
       if (response.data && response.data.task) {
@@ -49,6 +55,7 @@ const AddEditTasks = ({
         title: title,
         content: content,
         tags: tags,
+        dueDate: dueDate,
       });
 
       if (response.data && response.data.task) {
@@ -94,7 +101,7 @@ const AddEditTasks = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [title, content, tags]);
+  }, [title, content, tags, dueDate]);
 
   return (
     <div className="relative">
@@ -129,6 +136,16 @@ const AddEditTasks = ({
       <div className="mt-3">
         <label className="input-label">TAGS</label>
         <TagInput tags={tags} setTags={setTags} />
+      </div>
+      <div className="mt-3">
+        <label className="input-label">DUE DATE</label>
+        <DatePicker
+          selected={dueDate}
+          onChange={(date) => setDueDate(date)}
+          showTimeSelect
+          dateFormat="Pp"
+          className="text-sm text-slate-950 outline-none bg-slate-100 p-2 rounded"
+        />
       </div>
 
       {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
