@@ -12,6 +12,8 @@ import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import the GreetingCard component
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -25,6 +27,8 @@ const Home = () => {
     type: "add",
     message: "",
   });
+
+  const [reminderTime, setReminderTime] = useState("");
 
   const [allTasks, setAllTasks] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
@@ -42,6 +46,20 @@ const Home = () => {
 
   const handleCloseToast = () => {
     setShowToastMsg({ isShown: false, message: "" });
+  };
+
+  // Function to schedule browser notification
+  const scheduleNotification = (task) => {
+    const delay = new Date(task.reminderTime) - Date.now();
+    if (delay > 0) {
+      setTimeout(() => {
+        if (Notification.permission === "granted") {
+          new Notification("Reminder", { body: task.title });
+        } else {
+          toast.info(`Reminder: ${task.title}`);
+        }
+      }, delay);
+    }
   };
 
   // Get user info
@@ -66,6 +84,7 @@ const Home = () => {
 
       if (response.data && response.data.tasks) {
         setAllTasks(response.data.tasks);
+        response.data.tasks.forEach(scheduleNotification); // Schedule notifications for tasks
       }
     } catch {
       console.log("An unexpected error occurred. Please try again.");
@@ -184,6 +203,7 @@ const Home = () => {
                     content={item.content}
                     tags={item.tags}
                     dueDate={item.dueDate} // Ensure dueDate is passed here
+                    reminderTime={item.reminderTime} // Pass reminderTime here
                     isPinned={item.isPinned}
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
@@ -215,6 +235,7 @@ const Home = () => {
                     content={item.content}
                     tags={item.tags}
                     dueDate={item.dueDate} // Ensure dueDate is passed here
+                    reminderTime={item.reminderTime} // Pass reminderTime here
                     isPinned={item.isPinned}
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
