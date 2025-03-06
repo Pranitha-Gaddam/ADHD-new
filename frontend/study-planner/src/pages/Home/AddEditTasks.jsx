@@ -22,9 +22,9 @@ const AddEditTasks = ({
   const [dueDate, setDueDate] = useState(
     noteData?.dueDate ? new Date(noteData.dueDate) : null
   );
-  const [reminderTime, setReminderTime] = useState(
-    noteData?.reminderTime ? new Date(noteData.reminderTime) : null
-  );
+  // const [reminderTime, setReminderTime] = useState(
+  //   noteData?.reminderTime ? new Date(noteData.reminderTime) : null
+  // );
 
   const [error, setError] = useState(null);
 
@@ -36,7 +36,7 @@ const AddEditTasks = ({
       return;
     }
 
-    const delay = reminderTime - Date.now();
+    // const delay = reminderTime - Date.now();
     console.log(`Task: ${task.title}`);
   };
 
@@ -48,7 +48,7 @@ const AddEditTasks = ({
         content: content,
         tags: tags,
         dueDate: dueDate,
-        reminderTime: reminderTime,
+        //  reminderTime: reminderTime,
       });
 
       if (response.data && response.data.task) {
@@ -76,7 +76,7 @@ const AddEditTasks = ({
         content: content,
         tags: tags,
         dueDate: dueDate,
-        reminderTime: reminderTime,
+        //  reminderTime: reminderTime,
       });
 
       if (response.data && response.data.task) {
@@ -123,7 +123,7 @@ const AddEditTasks = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [title, content, tags, dueDate, reminderTime]);
+  }, [title, content, tags, dueDate]);
 
   return (
     <div className="relative">
@@ -170,7 +170,7 @@ const AddEditTasks = ({
           className="ml-2 text-sm text-slate-950 outline bg-slate-100 p-2 rounded"
         />
       </div>
-      <div className="mt-3">
+      {/* <div className="mt-3">
         <label className="input-label">REMINDER TIME</label>
         <DatePicker
           selected={reminderTime}
@@ -180,7 +180,7 @@ const AddEditTasks = ({
           dateFormat="Pp"
           className="ml-2 text-sm text-slate-950 outline bg-slate-100 p-2 rounded"
         />
-      </div>
+      </div> */}
 
       {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
 

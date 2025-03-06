@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd } from "react-icons/md";
@@ -12,7 +12,8 @@ import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import the GreetingCard component
-import { ToastContainer, toast } from "react-toastify";
+import Habits from "../../components/Habits/Habits"; // Import the Habits component
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
@@ -27,8 +28,6 @@ const Home = () => {
     type: "add",
     message: "",
   });
-
-  const [reminderTime, setReminderTime] = useState("");
 
   const [allTasks, setAllTasks] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
@@ -46,20 +45,6 @@ const Home = () => {
 
   const handleCloseToast = () => {
     setShowToastMsg({ isShown: false, message: "" });
-  };
-
-  // Function to schedule browser notification
-  const scheduleNotification = (task) => {
-    const delay = new Date(task.reminderTime) - Date.now();
-    if (delay > 0) {
-      setTimeout(() => {
-        if (Notification.permission === "granted") {
-          new Notification("Reminder", { body: task.title });
-        } else {
-          toast.info(`Reminder: ${task.title}`);
-        }
-      }, delay);
-    }
   };
 
   // Get user info
@@ -84,7 +69,6 @@ const Home = () => {
 
       if (response.data && response.data.tasks) {
         setAllTasks(response.data.tasks);
-        response.data.tasks.forEach(scheduleNotification); // Schedule notifications for tasks
       }
     } catch {
       console.log("An unexpected error occurred. Please try again.");
@@ -179,6 +163,21 @@ const Home = () => {
   const incompleteTasks = allTasks.filter((task) => !task.isCompleted);
   const completedTasks = allTasks.filter((task) => task.isCompleted);
 
+  const [habits, setHabits] = useState([
+    { name: "Sketch", progress: 1, goal: 4 },
+    { name: "Pray", progress: 2, goal: 4 },
+    { name: "Exercise", progress: 1, goal: 1 },
+    { name: "Journal", progress: 1, goal: 1 },
+  ]);
+
+  const toggleHabit = (index) => {
+    const newHabits = [...habits];
+    if (newHabits[index].progress < newHabits[index].goal) {
+      newHabits[index].progress += 1;
+    }
+    setHabits(newHabits);
+  };
+
   return (
     <>
       <Navbar
@@ -240,7 +239,7 @@ const Home = () => {
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
                     onDelete={() => deleteTask(item)}
-                    onPinNote={() => updateIsPinned(item)}
+                    // onPinNote={() => updateIsPinned(item)}
                     onToggleComplete={() => updateIsCompleted(item)}
                   />
                 ))}
@@ -255,6 +254,10 @@ const Home = () => {
                 }
               />
             )}
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
+            <h2 className="text-2xl font-bold mb-4">Your Habits</h2>
+            <Habits habits={habits} toggleHabit={toggleHabit} />
           </div>
         </div>
       </div>
