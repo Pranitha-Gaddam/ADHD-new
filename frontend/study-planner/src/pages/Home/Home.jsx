@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
+import EmptyHabitCard from "../../components/EmptyCard/EmptyHabitCard";
 import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -15,9 +16,16 @@ import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import
 import Habits from "../../components/Habits/Habits"; // Import the Habits component
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddEditHabits from "../../components/Habits/AddEditHabits";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
+    isShown: false,
+    type: "add",
+    data: null,
+  });
+
+  const [openAddEditHabitModal, setOpenAddEditHabitModal] = useState({
     isShown: false,
     type: "add",
     data: null,
@@ -31,6 +39,7 @@ const Home = () => {
 
   const [allTasks, setAllTasks] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [allHabits, setAllHabits] = useState([]);
 
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
@@ -149,34 +158,61 @@ const Home = () => {
     }
   };
 
+  // get all habits
+  const getAllHabits = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-habits");
+      if (response.data && response.data.habits) {
+        setAllHabits(response.data.habits);
+      }
+    } catch {
+      console.log("An expected error occurred. Please try again.");
+    }
+  };
+
   const handleclearSearch = () => {
     setIsSearch(false);
     getAllTasks();
   };
 
+  // Handle edit habit
+  const handleEditHabit = (habitDetails) => {
+    setOpenAddEditHabitModal({
+      isShown: true,
+      data: habitDetails,
+      type: "edit",
+    });
+  };
+
+  // Delete habit
+  const deleteHabit = async (data) => {
+    const habitId = data._id;
+    try {
+      const response = await axiosInstance.delete("/delete-habit/" + habitId);
+      if (response.data && !response.data.error) {
+        getAllHabits();
+        showToastMessage("Habit Deleted Successfully!", "delete");
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        console.log("An expected error occurred. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
     getAllTasks();
     getUserInfo();
+    getAllHabits();
     return () => {};
   }, []);
 
   const incompleteTasks = allTasks.filter((task) => !task.isCompleted);
   const completedTasks = allTasks.filter((task) => task.isCompleted);
-
-  const [habits, setHabits] = useState([
-    { name: "Sketch", progress: 1, goal: 4 },
-    { name: "Pray", progress: 2, goal: 4 },
-    { name: "Exercise", progress: 1, goal: 1 },
-    { name: "Journal", progress: 1, goal: 1 },
-  ]);
-
-  const toggleHabit = (index) => {
-    const newHabits = [...habits];
-    if (newHabits[index].progress < newHabits[index].goal) {
-      newHabits[index].progress += 1;
-    }
-    setHabits(newHabits);
-  };
 
   return (
     <>
@@ -218,7 +254,7 @@ const Home = () => {
                 message={
                   isSearch
                     ? `Oops! No tasks found matching your search.`
-                    : `Let’s get things rolling! Click ‘Add’ to create your first task—whether it’s big or small, every step counts!`
+                    : `Create your first task—whether it’s big or small, every step counts!`
                 }
               />
             )}
@@ -257,8 +293,63 @@ const Home = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
             <h2 className="text-2xl font-bold mb-4">Your Habits</h2>
-            <Habits habits={habits} toggleHabit={toggleHabit} />
+            <div className="flex gap-4 mt-2 overflow-x-auto">
+              <button
+                onClick={() => {
+                  setOpenAddEditHabitModal({
+                    isShown: true,
+                    type: "add",
+                    data: null,
+                  });
+                }}
+                className="flex flex-col items-center p-4 bg-white rounded-lg relative group"
+              >
+                <div className="w-16 h-16 flex items-center justify-center text-lg font-bold border-4 border-gray-700 rounded-full hover:bg-gray-300">
+                  <MdAdd className="text-[32px] text-gray-700" />
+                </div>
+                <span className="text-sm mt-1">Add Habit</span>
+              </button>
+              {allHabits.map((item, index) => (
+                <Habits
+                  key={item._id}
+                  name={item.name}
+                  repeat={item.repeat}
+                  progress={item.progress}
+                  goal={item.goal}
+                  color={item.color}
+                  notify={item.notify}
+                  onEditHabit={() => handleEditHabit(item)}
+                  onDeleteHabit={() => deleteHabit(item)}
+                  onToggleHabit={() => {}}
+                />
+              ))}
+            </div>
           </div>
+          <Modal
+            isOpen={openAddEditHabitModal.isShown}
+            onRequestClose={() => {}}
+            style={{
+              overlay: {
+                backgroundColor: "rgba(0,0,0,0.2)",
+              },
+            }}
+            contentLabel=""
+            className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow-scroll"
+          >
+            <AddEditHabits
+              type={openAddEditHabitModal.type}
+              habitData={openAddEditHabitModal.data}
+              onClose={() => {
+                setOpenAddEditHabitModal({
+                  isShown: false,
+                  type: "add",
+                  data: null,
+                });
+              }}
+              getAllHabits={getAllHabits}
+              showToastMessage={showToastMessage}
+            />
+          </Modal>
         </div>
       </div>
       <div className="relative">

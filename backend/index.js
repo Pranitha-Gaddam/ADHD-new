@@ -15,6 +15,7 @@ mongoose
 
 const User = require("./models/user.model");
 const Task = require("./models/task.model");
+const Habit = require("./models/habit.model");
 
 const express = require("express");
 const cors = require("cors");
@@ -133,7 +134,7 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 // Add Task
 app.post("/add-task", authenticateToken, async (req, res) => {
-  const { title, content, tags, isCompleted } = req.body; // Add isCompleted to the destructuring
+  const { title, content, tags, isCompleted } = req.body;
   const { user } = req.user;
 
   if (!title) {
@@ -335,6 +336,132 @@ app.get("/search-tasks/", authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error("Error searching tasks:", error);
+    return res
+      .status(500)
+      .json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+// Add habit
+app.post("/add-habit", authenticateToken, async (req, res) => {
+  const { name, goal, repeat, color, notify } = req.body;
+  const { user } = req.user;
+
+  if (!name) {
+    return res.status(400).json({ error: true, message: "Name is required" });
+  }
+
+  if (!goal) {
+    return res.status(400).json({ error: true, message: "Goal is required" });
+  }
+  if (!repeat) {
+    return res.status(400).json({ error: true, message: "Repeat is required" });
+  }
+
+  if (!notify) {
+    return res.status(400).json({ error: true, message: "Notify is required" });
+  }
+
+  try {
+    const habit = new Habit({
+      name,
+      goal,
+      repeat,
+      color,
+      notify,
+      userId: user._id,
+    });
+
+    await habit.save();
+
+    return res.json({
+      error: false,
+      habit,
+      message: "Habit added successfully",
+    });
+  } catch (error) {
+    console.error("Error adding habit:", error);
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+// Edit habit
+app.put("/edit-habit/:habitId", authenticateToken, async (req, res) => {
+  const habitId = req.params.habitId;
+  const { name, goal, repeat, color, notify } = req.body;
+  const { user } = req.user;
+
+  if (!name && !goal && !repeat && !color && !notify) {
+    return res
+      .status(400)
+      .json({ error: true, message: "No changes provided" });
+  }
+
+  try {
+    const habit = await Habit.findOne({ _id: habitId, userId: user._id });
+
+    if (!habit) {
+      return res.status(404).json({ error: true, message: "Habit not found" });
+    }
+
+    if (name) habit.name = name;
+    if (goal) habit.goal = goal;
+    if (repeat) habit.repeat = repeat;
+    if (color) habit.color = color;
+    if (notify) habit.notify = notify;
+
+    await habit.save();
+
+    return res.json({
+      error: false,
+      habit,
+      message: "Habit updated successfully",
+    });
+  } catch (error) {
+    console.error("Error editing habit:", error);
+    return res
+      .status(500)
+      .json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+// Get all habits
+app.get("/get-all-habits/", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+
+  try {
+    const habits = await Habit.find({ userId: user._id });
+    return res.json({
+      error: false,
+      habits,
+      message: "Habits retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error retrieving habits:", error);
+    return res
+      .status(500)
+      .json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+// Delete habit
+app.delete("/delete-habit/:habitId", authenticateToken, async (req, res) => {
+  const habitId = req.params.habitId;
+  const { user } = req.user;
+
+  try {
+    const habit = await Habit.findOne({ _id: habitId, userId: user._id });
+
+    if (!habit) {
+      return res.status(404).json({ error: true, message: "Habit not found" });
+    }
+    await habit.deleteOne({ _id: habitId, userId: user._id });
+
+    return res.json({ error: false, message: "Habit deleted successfully" });
+  } catch (error) {
     return res
       .status(500)
       .json({ error: true, message: "Internal Server Error" });
