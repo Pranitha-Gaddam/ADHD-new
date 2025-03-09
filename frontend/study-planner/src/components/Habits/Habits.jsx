@@ -1,17 +1,16 @@
-import React from "react";
+import "react";
 import PropTypes from "prop-types";
 import { MdCreate, MdDelete } from "react-icons/md";
 
 const Habits = ({
   name,
-  repeat,
+
   progress,
   goal,
   color,
-  notify,
+
   onEditHabit,
   onDeleteHabit,
-  onToggleHabit,
 }) => {
   return (
     <div className="flex flex-col items-center p-4 bg-white rounded-lg relative group">

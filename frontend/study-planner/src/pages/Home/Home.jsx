@@ -8,13 +8,12 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
-import EmptyHabitCard from "../../components/EmptyCard/EmptyHabitCard";
 import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import the GreetingCard component
 import Habits from "../../components/Habits/Habits"; // Import the Habits component
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
 
@@ -231,7 +230,7 @@ const Home = () => {
             <h2 className="text-2xl font-bold mb-4">My Tasks</h2>
             {incompleteTasks.length > 0 ? (
               <div className="flex flex-col gap-4">
-                {incompleteTasks.map((item, index) => (
+                {incompleteTasks.map((item) => (
                   <NoteCard
                     key={item._id}
                     title={item.title}
@@ -263,7 +262,7 @@ const Home = () => {
             <h2 className="text-2xl font-bold mb-4">Completed Tasks</h2>
             {completedTasks.length > 0 ? (
               <div className="flex flex-col gap-4">
-                {completedTasks.map((item, index) => (
+                {completedTasks.map((item) => (
                   <NoteCard
                     key={item._id}
                     title={item.title}
@@ -309,7 +308,7 @@ const Home = () => {
                 </div>
                 <span className="text-sm mt-1">Add Habit</span>
               </button>
-              {allHabits.map((item, index) => (
+              {allHabits.map((item) => (
                 <Habits
                   key={item._id}
                   name={item.name}

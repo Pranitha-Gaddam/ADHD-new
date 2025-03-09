@@ -43,6 +43,13 @@ const AddEditHabits = ({
       }
     }
   };
+  AddEditHabits.propTypes = {
+    habitData: PropTypes.object,
+    type: PropTypes.string.isRequired,
+    getAllHabits: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    showToastMessage: PropTypes.func.isRequired,
+  };
 
   // Edit Habit
   const editHabit = async () => {
