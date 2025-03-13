@@ -30,4 +30,8 @@
   .input-label {
     @apply text-xs text-slate-400;
   }
+  .studymode {
+        background-image: url('imgs/e54008fec896ec085da559cf537d6f32.gif');
+        background-size: cover;
+    }
 }
