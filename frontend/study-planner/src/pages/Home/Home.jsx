@@ -203,6 +203,35 @@ const Home = () => {
     }
   };
 
+  const handleUpdateProgress = async (habitData) => {
+    const habitId = habitData._id;
+    console.log("Updating progress for habitId:", habitId);
+
+    try {
+      const response = await axiosInstance.put(
+        "/update-habit-progress/" + habitId
+      );
+      console.log("Response from server:", response.data);
+      if (response.data && response.data.habit) {
+        getAllHabits();
+        showToastMessage("Habit Progress Updated Successfully!");
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        console.error(
+          "Error response from server:",
+          error.response.data.message
+        );
+      } else {
+        console.error("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
     getAllTasks();
     getUserInfo();
@@ -319,7 +348,7 @@ const Home = () => {
                   notify={item.notify}
                   onEditHabit={() => handleEditHabit(item)}
                   onDeleteHabit={() => deleteHabit(item)}
-                  onToggleHabit={() => {}}
+                  onUpdateProgress={() => handleUpdateProgress(item)}
                 />
               ))}
             </div>

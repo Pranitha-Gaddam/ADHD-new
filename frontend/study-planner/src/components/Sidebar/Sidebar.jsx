@@ -1,4 +1,4 @@
-import React from "react";
+import "react";
 import { Link } from "react-router-dom";
 import { AiFillHome, AiFillCalendar, AiFillClockCircle } from "react-icons/ai"; // Import the icons
 
