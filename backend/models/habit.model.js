@@ -19,7 +19,8 @@ const habitSchema = new Schema({
     ],
     default: "daily",
   },
-  goal: { type: [Number], default: [] },
+  progress: { type: Number, default: 0 },
+  goal: { type: Number, default: 1 },
   color: { type: String, default: "#FFFFFF" },
   notify: {
     type: String,

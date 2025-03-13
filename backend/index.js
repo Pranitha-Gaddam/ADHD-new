@@ -369,6 +369,7 @@ app.post("/add-habit", authenticateToken, async (req, res) => {
       repeat,
       color,
       notify,
+      progress: 0,
       userId: user._id,
     });
 
@@ -412,6 +413,7 @@ app.put("/edit-habit/:habitId", authenticateToken, async (req, res) => {
     if (repeat) habit.repeat = repeat;
     if (color) habit.color = color;
     if (notify) habit.notify = notify;
+    if (progress) habit.progress = progress;
 
     await habit.save();
 
@@ -468,6 +470,61 @@ app.delete("/delete-habit/:habitId", authenticateToken, async (req, res) => {
   }
 });
 
+// Update habit progress
+app.put(
+  "/update-habit-progress/:habitId",
+  authenticateToken,
+  async (req, res) => {
+    const habitId = req.params.habitId;
+    const { user } = req.user;
+
+    try {
+      const habit = await Habit.findOne({ _id: habitId, userId: user._id });
+
+      if (!habit) {
+        return res
+          .status(404)
+          .json({ error: true, message: "Habit not found" });
+      }
+
+      // Ensure progress is initialized only if it is undefined
+      if (habit.progress === undefined) {
+        habit.progress = 0;
+      }
+
+      // Ensure goal is initialized only if it is undefined
+      if (habit.goal === undefined) {
+        return res.status(400).json({
+          error: true,
+          message: "Goal is not defined for this habit",
+        });
+      }
+
+      console.log(`Current progress: ${habit.progress}, Goal: ${habit.goal}`);
+      if (habit.progress < habit.goal) {
+        habit.progress += 1;
+      } else {
+        return res.status(400).json({
+          error: true,
+          message: "Progress is already at or above the goal",
+        });
+      }
+
+      await habit.save();
+
+      return res.json({
+        error: false,
+        habit,
+        message: "Habit progress updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating habit progress:", error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Internal Server Error" });
+    }
+  }
+);
 app.listen(8000, () => {
   console.log("Server is running on port 8000");
 });
