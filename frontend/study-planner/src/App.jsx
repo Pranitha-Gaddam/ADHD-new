@@ -8,7 +8,8 @@ import {
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
-import CalendarPage from "./pages/Calendar/Calendar";
+import CalendarPage from "./pages/Calendar/CalendarApp";
+import StudyMode from "./pages/StudyMode/StudyMode";
 import "./index.css";
 
 const App = () => {
