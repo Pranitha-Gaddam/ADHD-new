@@ -9,6 +9,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import CalendarPage from "./pages/Calendar/Calendar";
+import StudyMode from "./components/StudyMode/StudyMode";
 import "./index.css";
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="pomodoro" element={<StudyMode />} />
       </Routes>
     </Router>
   );
