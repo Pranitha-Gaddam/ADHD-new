@@ -10,10 +10,9 @@ import Toast from "../../components/ToastMessage/Toast";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
 import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
-import Sidebar from "../../components/Sidebar/Sidebar";
 import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import the GreetingCard component
 import Habits from "../../components/Habits/Habits"; // Import the Habits component
-
+import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
 
@@ -203,35 +202,6 @@ const Home = () => {
     }
   };
 
-  const handleUpdateProgress = async (habitData) => {
-    const habitId = habitData._id;
-    console.log("Updating progress for habitId:", habitId);
-
-    try {
-      const response = await axiosInstance.put(
-        "/update-habit-progress/" + habitId
-      );
-      console.log("Response from server:", response.data);
-      if (response.data && response.data.habit) {
-        getAllHabits();
-        showToastMessage("Habit Progress Updated Successfully!");
-      }
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        console.error(
-          "Error response from server:",
-          error.response.data.message
-        );
-      } else {
-        console.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  };
-
   useEffect(() => {
     getAllTasks();
     getUserInfo();
@@ -244,6 +214,7 @@ const Home = () => {
 
   return (
     <>
+      <Nav />
       <Navbar
         userInfo={userInfo}
         onSearchTask={onSearchTask}
@@ -251,7 +222,7 @@ const Home = () => {
         showSearchBar={true}
       />
       <div className="flex">
-        <Sidebar />
+        {/* <Nav /> */}
         <div className="flex-1 container mx-auto">
           {userInfo && <GreetingCard username={userInfo.fullName} />}{" "}
           {/* Display the GreetingCard */}
@@ -348,7 +319,7 @@ const Home = () => {
                   notify={item.notify}
                   onEditHabit={() => handleEditHabit(item)}
                   onDeleteHabit={() => deleteHabit(item)}
-                  onUpdateProgress={() => handleUpdateProgress(item)}
+                  onToggleHabit={() => {}}
                 />
               ))}
             </div>

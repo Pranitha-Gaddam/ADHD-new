@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaRedo, FaCog } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import Nav from "../Navbar/Nav";
 
 const DEFAULT_TIMES = {
   Pomodoro: 25 * 60,
@@ -68,12 +69,13 @@ const StudyMode = () => {
   const percentage = ((DEFAULT_TIMES[mode] - time) / DEFAULT_TIMES[mode]) * 100;
 
   return (
-    <div className="flex bg-black flex-col items-center justify-center h-screen w-full text-white  studymode">
+    <div className="flex bg-black flex-col items-center justify-center h-screen w-full text-white studymode">
+        <Nav />
       <div className="flex space-x-4 mb-6">
         {["Pomodoro", "Short Break", "Long Break"].map((item) => (
           <button
             key={item}
-            className={`px-5 py-2  font-semibold rounded-lg transition-all ${mode === item ? "border bg-white border-white text-white shadow-md backdrop-filter backdrop-blur-lg bg-opacity-35" : "text-white border border-white shadow-sm  hover:shadow-md hover:bg-opacity-30 backdrop-filter backdrop-blur-lg bg-opacity-25"}`}
+            className={`px-5 py-2 font-semibold rounded-lg transition-all ${mode === item ? "bg-white text-white shadow-lg glass-effect " : "border border-neutral-300 text-white shadow-sm hover:shadow-md hover:bg-opacity-30"}`}
             onClick={() => handleModeChange(item)}
           >
             {item}
@@ -81,7 +83,7 @@ const StudyMode = () => {
         ))}
       </div>
 
-      <div style={{ width: 300, height: 300 }} className="">
+      <div style={{ width: 300, height: 300 }}>
         <CircularProgressbar
           value={percentage}
           text={formatTime(time)}
@@ -97,9 +99,9 @@ const StudyMode = () => {
 
       <div className="mt-6 flex items-center space-x-4">
         <button
-          className="px-5 py-2 bg-white font-semibold rounded-lg transition-all border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border active:bg-opacity-30 active:shadow-md hover:bg-opacity-25"
+          className="px-5 py-2 bg-white font-semibold rounded-lg transition-all glass-effect border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border"
           onClick={toggleTimer}
-          >
+        >
           {isRunning ? "Pause" : "Start"}
         </button>
         <button className="text-white opacity-60 hover:opacity-80" onClick={resetTimer}>

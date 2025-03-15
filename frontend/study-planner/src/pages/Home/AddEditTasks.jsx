@@ -1,8 +1,8 @@
-import "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axiosInstance from "../../utils/axiosInstance"; // Adjust the import path as needed
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,6 +22,9 @@ const AddEditTasks = ({
   const [dueDate, setDueDate] = useState(
     noteData?.dueDate ? new Date(noteData.dueDate) : null
   );
+  // const [reminderTime, setReminderTime] = useState(
+  //   noteData?.reminderTime ? new Date(noteData.reminderTime) : null
+  // );
 
   const [error, setError] = useState(null);
 
@@ -195,7 +198,6 @@ const AddEditTasks = ({
 
 AddEditTasks.propTypes = {
   noteData: PropTypes.shape({
-    _id: PropTypes.string,
     title: PropTypes.string,
     content: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
