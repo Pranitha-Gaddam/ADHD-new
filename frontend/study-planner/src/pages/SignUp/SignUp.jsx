@@ -1,10 +1,12 @@
 import "react";
 import Navbar from "../../components/Navbar/Navbar";
-import PasswordInput from "../../components/Input/PasswordInput";
+import PasswordInput from "../../components/Input/PasswordInput"; // Import PasswordInput component
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
+import "./SignUp.css";
+import mascot from "../../assets/images/mascot.svg";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -65,55 +67,75 @@ const SignUp = () => {
       ) {
         setError(error.response.data.message);
       } else {
-        setError("An unxpected error occured. Please try again later.");
+        setError("An unexpected error occurred. Please try again later.");
       }
     }
   };
+
   return (
     <>
-      <Navbar />
-
-      <div className="flex justify-center items-center mt-28">
-        <div className="w-96 border bg-white py-10 rounded px-7">
-          <form onSubmit={handleSignUp}>
-            <h4 className="text-2xl mb-7">Sign Up</h4>
-
-            <input
-              type="text"
-              className="input-box"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <input
-              type="text"
-              className="input-box"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <PasswordInput
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
-
-            <button type="submit" className="btn-primary">
-              Create Account
-            </button>
-
-            <p className="text-sm-text-center mt-4">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="font-medium text-primary text-blue-600 underline"
-              >
-                Login
-              </Link>
-            </p>
-          </form>
+      <div className="signup-container">
+        <div className="mascot-container">
+          <img src={mascot} alt="Mascot" className="mascot-image" />
         </div>
+        <div className="signup-content">
+          <h2 className="signup-title">
+            <span className="signup-line1">Welcome to Your</span>
+            <span className="signup-line2">ADHD Study Planner!</span>
+          </h2>
+          <div className="form-container">
+            <form onSubmit={handleSignUp}>
+              <div className="form-group">
+                <label htmlFor="name" className="form-label">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  className="form-input"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  className="form-input"
+                  placeholder="john.doe@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password" className="form-label">Password</label>
+                <PasswordInput
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                />
+              </div>
+
+              {error && <p className="error-message">{error}</p>}
+
+              <button type="submit" className="submit-button">
+                Get Started
+              </button>
+
+              <p className="redirect-text">
+                Already have an account?{" "}
+                <Link to="/login" className="login-link">
+                  Login
+                </Link>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div className="quote-banner">
+        "Stay organized, stay motivated, and make studying work for YOU."
       </div>
     </>
   );

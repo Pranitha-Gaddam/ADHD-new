@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quintessential&display=swap'); /* Import Quintessential font */
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #d8e5d5;
+    margin: 0;
+    padding: 0;
+}
+
+.signup-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+    background-color: #d8e5d5;
+    flex-wrap: nowrap;
+}
+
+.mascot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 60px;
+}
+
+.mascot-image {
+    width: 80%;
+    max-width: 700px;
+    height: auto;
+}
+
+.signup-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.signup-line1,
+.signup-line2 {
+    display: block;
+    font-size: 2.5rem;
+    font-family: 'Quintessential';
+    font-style: bold;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligning inputs to the left */
+    background: #1f2e3d;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 8px solid #f9f5ec;
+    width: 100%; /* Ensure full width for the form */
+    max-width: 600px; /* Limit the maximum width of the form */
+    color: #f9f5ec;
+    box-sizing: border-box; /* Ensures padding does not affect the width */
+}
+
+
+
+.form-label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #f9f5ec;
+    font-family: 'Quintessential';
+    width: 100%; /* Make the label take up full width */
+    text-align: left;
+}
+
+.form-input {
+    width: 100%; /* Ensure inputs take up the full width of the container */
+    padding: 10px;
+    margin-bottom: 15px; /* Space between inputs */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white; /* Ensuring the background is white */
+    color: black;
+    box-sizing: border-box; /* Ensures padding is included in the element's width */
+}
+
+.submit-button {
+    width: 100%; /* Ensure the submit button is as wide as the form */
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #f9f5ec;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Input placeholder styling for better appearance */
+.form-input::placeholder {
+    color: #888; /* Light grey placeholder */
+}
+
+/* Hover effect for the button */
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.redirect-text {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.login-link {
+    color: #4CAF50;
+    text-decoration: underline;
+}
+
+.quote-banner {
+    background-color: #F8F5EC;
+    color: black;
+    text-align: center;
+    padding: 20px;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    font-family: 'Rancho', cursive;
+}
+
+/* Responsive Design for smaller screens */
+@media screen and (max-width: 768px) {
+    .signup-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .mascot-image {
+        max-width: 80%;
+    }
+
+    .form-container {
+        padding: 1rem;
+        margin-top: 10px;
+    }
+
+    .quote-banner {
+        font-size: 2rem;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .signup-title {
+        font-size: 1.25rem;
+    }
+
+    .form-container {
+        width: 90%;
+        padding: 1rem;
+        margin-top: 5px;
+    }
+
+    .mascot-image {
+        max-width: 80%;
+    }
+
+    .quote-banner {
+        font-size: 1.5rem;
+        padding: 5px;
+    }
+}
