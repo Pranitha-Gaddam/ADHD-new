@@ -5,8 +5,7 @@ import Login from "../Login/Login";
 import "./AuthContainer.css";
 
 const AuthContainer = () => {
-  const [isLogin, setIsLogin] = useState(true); // ✅ useState is here
-
+  const [isLogin, setIsLogin] = useState(true); 
   return (
     
     <div className="auth-container">
