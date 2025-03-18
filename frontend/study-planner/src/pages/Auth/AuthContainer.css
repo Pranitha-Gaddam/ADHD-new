@@ -14,7 +14,7 @@
 }
 
 .mascot-image {
-    width: 800px; /* Increase the width */
+    width: 30rem; /* Increase the width */
     height: auto;  /* Maintain aspect ratio */
     max-width: 100%; /* Ensure it doesn’t overflow */
 }
@@ -45,12 +45,14 @@
     background: #1f2e3d;
     padding: 2rem;
     border-radius: 20px;
-    border: 8px solid #f9f5ec;
+    border: 0.8vw solid #f9f5ec; 
     color: #f9f5ec;
-    width: 100%;
-    max-width: 400px;
+    width: 90%; 
+    max-width: 30vw; 
+    min-width: 350px; 
     box-sizing: border-box;
 }
+
 
 .toggle-button {
     margin-top: 10px;
@@ -73,3 +75,4 @@
     margin-top: -100px; /* Move it up */
     font-size: 5rem;
 }
+

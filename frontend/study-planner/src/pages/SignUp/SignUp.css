@@ -27,25 +27,25 @@ body {
 }
 
 .mascot-image {
-    width: 80%;
-    max-width: 700px;
+    width: 100%;
+    max-width: 190vw;
     height: auto;
 }
 
 
 .signup-content {
     flex: 1; /* Allows it to take more space */
-    width: 100%;
+    width: 30vw;
     max-width: 500px; /* Increase this for a larger form */
     padding: 2rem; /* Increase padding for better spacing */
-    transform: scale(1.5); /* Increase size */
+   
 }
 
 .signup-title {
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 10px;
+   margin-top: 1rem;
 }
 
 .signup-line1,

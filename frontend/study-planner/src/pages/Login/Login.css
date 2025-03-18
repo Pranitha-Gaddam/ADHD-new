@@ -38,10 +38,10 @@ body {
 
 .login-content {
     flex: 1; /* Allows it to take more space */
-    width: 100%;
+    width: 40vw;
     max-width: 500px; /* Increase this for a larger form */
     padding: 2rem; /* Increase padding for better spacing */
-    transform: scale(1.5); /* Increase size */
+   /* transform: scale(1.1); /* Increase size */
 }
 
 
@@ -143,8 +143,8 @@ body {
     background-color: #F8F5EC;
     color: black;
     text-align: center;
-    padding: 20px;
-    font-size: 3rem;
+    padding: 1rem;
+    font-size: 1rem;
     font-weight: bold;
     margin-top: 20px;
     width: 100%;
