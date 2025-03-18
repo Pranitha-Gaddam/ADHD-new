@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quintessential&display=swap'); /* Import Quintessential font */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #d8e5d5;
+    margin: 0;
+    padding: 0;
+    margin-top: -60px;
+}
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+    width: 100%;
+    background-color: #d8e5d5;
+    flex-wrap: nowrap;
+}
+
+
+.mascot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 60px;
+}
+
+.mascot-image {
+    width: 80%;
+    max-width: 700px;
+    height: auto;
+    margin-left: -200px;
+    transform: scale(1.4);
+}
+
+.login-content {
+    flex: 1; /* Allows it to take more space */
+    width: 100%;
+    max-width: 500px; /* Increase this for a larger form */
+    padding: 2rem; /* Increase padding for better spacing */
+    transform: scale(1.5); /* Increase size */
+}
+
+
+.login-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-line1,
+.login-line2 {
+    display: block;
+    font-size: 2.4rem;
+    font-family: 'Quintessential';
+    font-style: bold;
+    margin-left: 40px;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 800px; /* Increase this */
+    padding: 3rem; /* Optional: Add more padding */
+    
+}
+
+
+.form-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #f9f5ec;
+    font-family: 'Quintessential';
+    width: 100%;
+    text-align: left;
+}
+
+.form-input {
+    width: 120%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    color: black;
+    box-sizing: border-box;
+}
+
+.form-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #1f2e3d; /* ✅ Change label color */
+    font-family: 'Quintessential';
+    width: 100%;
+    text-align: left;
+}
+
+
+.submit-button {
+    width: 120%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #f9f5ec;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.form-input::placeholder {
+    color: #888;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.redirect-text {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.signup-link {
+    color: #4CAF50;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.quote-banner {
+    background-color: #F8F5EC;
+    color: black;
+    text-align: center;
+    padding: 20px;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    font-family: 'Rancho', cursive;
+}
+.redirect-text {
+    font-size: 1.2rem; /* Match the font size */
+    font-family: 'Quintessential', sans-serif; /* Match the font */
+    color: #1f2e3d; /* Match the color */
+    text-align: left; /* Keep it centered */
+    margin-top: 10px;
+}
+
+/* Responsive Design for smaller screens */
+@media screen and (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .mascot-image {
+        max-width: 80%;
+    }
+
+    .form-container {
+        padding: 1rem;
+        margin-top: 10px;
+        
+    }
+
+    .quote-banner {
+        font-size: 2rem;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .login-title {
+        font-size: 1.25rem;
+    }
+
+    .form-container {
+        width: 90%;
+        padding: 1rem;
+        margin-top: 5px;
+    }
+
+    .mascot-image {
+        max-width: 80%;
+    }
+
+    .quote-banner {
+        font-size: 1.5rem;
+        padding: 5px;
+    }
+}
