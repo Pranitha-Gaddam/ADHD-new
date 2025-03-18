@@ -8,7 +8,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import "./SignUp.css";
 import mascot from "../../assets/images/mascot.svg";
 
-const SignUp = () => {
+const SignUp = ({ setIsLogin }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -126,17 +126,15 @@ const SignUp = () => {
 
               <p className="redirect-text">
                 Already have an account?{" "}
-                <Link to="/login" className="login-link">
+                <span className="login-link" onClick={() => setIsLogin(true)}>
                   Login
-                </Link>
+                </span>
               </p>
             </form>
           </div>
         </div>
       </div>
-      <div className="quote-banner">
-        "Stay organized, stay motivated, and make studying work for YOU."
-      </div>
+      
     </>
   );
 };
