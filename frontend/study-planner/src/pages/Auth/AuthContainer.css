@@ -1,0 +1,75 @@
+.auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #d8e5d5;
+}
+
+.mascot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mascot-image {
+    width: 800px; /* Increase the width */
+    height: auto;  /* Maintain aspect ratio */
+    max-width: 100%; /* Ensure it doesn’t overflow */
+}
+
+
+.auth-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-family: "Quintessential";
+    margin-bottom: 10px;
+}
+
+/* The box that contains the flipping form */
+.form-box {
+    width: 100%;
+    max-width: 400px;
+    perspective: 1000px;
+}
+
+/* The flipping form container */
+.auth-form {
+    background: #1f2e3d;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 8px solid #f9f5ec;
+    color: #f9f5ec;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.toggle-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.toggle-button:hover {
+    background-color: #45a049;
+}
+
+.quote-banner {
+    position: relative; /* Ensure it's positioned properly */
+    margin-top: -100px; /* Move it up */
+    font-size: 5rem;
+}
