@@ -1,20 +1,39 @@
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 import {
-  createViewDay,
-  createViewMonthAgenda,
-  createViewMonthGrid,
-  createViewWeek,
+  viewWeek,
+  viewDay,
+  viewMonthGrid,
+  viewMonthAgenda,
 } from '@schedule-x/calendar'
 import { createEventsServicePlugin } from '@schedule-x/events-service'
- 
+import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop'
+import { createEventModalPlugin } from '@schedule-x/event-modal'
 import '@schedule-x/theme-default/dist/index.css'
 import React, { useEffect, useState } from 'react'
 
 function CalendarApp() {
   const eventsService = useState(() => createEventsServicePlugin())[0]
+  // const plugins = [createDragAndDropPlugin(), createEventModalPlugin()]
   // the calander view
   const calendar = useCalendarApp({
-    views: [createViewDay(), createViewWeek(), createViewMonthGrid(), createViewMonthAgenda()],
+    defaultView: viewWeek.name,
+    views: [viewWeek, viewDay, viewMonthGrid, viewMonthAgenda],
+    plugins: [createDragAndDropPlugin(), createEventModalPlugin()],
+    calendars: {
+      personal: {
+        colorName: 'personal',
+        lightColors: {
+          main: '#f9d71c',
+          container: '#fff5aa',
+          onContainer: '#594800',
+        },
+        darkColors: {
+          main: '#fff5c0',
+          onContainer: '#fff5de',
+          container: '#a29742',
+        },
+      },
+    },
     events: [
       {
         id: 1,
@@ -25,10 +44,12 @@ function CalendarApp() {
         hardLevel: 'Hard',
         completeLevel: 'Complete',
         duration: '2 hours',
+        calendarId: 'personal',
       }
-    ]
+    ],
   })
 
+  // eventModal.close(); // close the modal
  
   return (
     <div>

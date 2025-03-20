@@ -15,6 +15,8 @@
   },
   "dependencies": {
     "@schedule-x/calendar": "^2.21.1",
+    "@schedule-x/drag-and-drop": "^2.22.0",
+    "@schedule-x/event-modal": "^2.22.0",
     "@schedule-x/events-service": "^2.21.1",
     "@schedule-x/react": "^2.21.2",
     "@schedule-x/theme-default": "^2.21.1",
