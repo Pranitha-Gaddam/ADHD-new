@@ -38,8 +38,19 @@ function CalendarApp() {
       {
         id: 1,
         title: 'Event 1',
-        start: '2024-11-18', //due date
-        end: '2024-11-18',
+        start: '2025-11-18', //due date
+        end: '2025-11-18',
+        description: 'Description 1',
+        hardLevel: 'Hard',
+        completeLevel: 'Complete',
+        duration: '2 hours',
+        calendarId: 'personal',
+      },
+      {
+        id: 1,
+        title: 'Event 2',
+        start: '2025-03-18', //due date
+        end: '2025-03-18',
         description: 'Description 1',
         hardLevel: 'Hard',
         completeLevel: 'Complete',
