@@ -6,8 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
+import AuthContainer from './pages/Auth/AuthContainer';
 import StudyMode from "./components/StudyMode/StudyMode";
 import CalendarPage from "./pages/Calendar/Calendar";
 import "./index.css";
@@ -16,10 +15,9 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/" element={<Navigate to="/auth" />} />
         <Route path="/dashboard" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/auth" element={<AuthContainer />} />
         <Route path="/study-mode" element={<StudyMode />} />
         <Route path="/calendar" element={<CalendarPage />} />
       </Routes>

@@ -10,18 +10,18 @@ const PasswordInput = ({ value, onChange, placeholder }) => {
     };
 
     return (
-        <div className='flex items-center bg-transparent border-[1.5px] px-5 rounded mb-3'>
+        <div className='relative flex items-center'>
             <input 
                 value={value}
                 onChange={onChange}
                 type={isShowPassword ? "text" : "password"}
                 placeholder={placeholder || "Password"}
-                className="w-full text-sm bg-transparent py-3 mr-3 rounded outline-none"
+                className="form-input w-full pr-10"
             />
             <button 
                 type="button" 
                 onClick={toggleShowPassword}
-                className="text-sm text-blue-500 hover:text-blue-700 focus:outline-none"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-blue-500 focus:outline-none cursor-pointer"
             >
                 {/* {isShowPassword ? "Hide" : "Show"} */}
             </button>

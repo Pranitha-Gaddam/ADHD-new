@@ -75,3 +75,31 @@
   }
 
 } 
+/* Flip Container */
+.flip-container {
+  perspective: 1000px;
+}
+
+.flip-container .form-container {
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+}
+
+.flip-container:hover .form-container {
+  transform: rotateY(180deg);
+}
+
+/* Front Side (Login/SignUp Form) */
+.form-container {
+  position: relative;
+  backface-visibility: hidden;
+}
+
+/* Back Side */
+.form-container-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
