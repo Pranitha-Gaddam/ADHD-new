@@ -213,17 +213,24 @@ const Home = () => {
   const completedTasks = allTasks.filter((task) => task.isCompleted);
 
   return (
-    <>
-      <Nav />
-      <Navbar
-        userInfo={userInfo}
-        onSearchTask={onSearchTask}
-        handleclearSearch={handleclearSearch}
-        showSearchBar={true}
-      />
-      <div className="flex">
+    <div clasName="h-screen flex flex-col z-40">
+      <div className="h-35">
+        <Navbar
+          userInfo={userInfo}
+          onSearchTask={onSearchTask}
+          handleclearSearch={handleclearSearch}
+          showSearchBar={true}
+        />
+      </div>
+      
+      
+      <div className="flex-1 flex flex-row">
         {/* <Nav /> */}
-        <div className="flex-1 container mx-auto">
+        <div className="w-20 ml-4">
+          <Nav />
+        </div>
+        
+        <div className="flex-1">
           {userInfo && <GreetingCard username={userInfo.fullName} />}{" "}
           {/* Display the GreetingCard */}
           <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
@@ -399,7 +406,7 @@ const Home = () => {
         type={showToastMsg.type}
         onClose={handleCloseToast}
       />
-    </>
+    </div>
   );
 };
 

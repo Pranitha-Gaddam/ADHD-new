@@ -69,9 +69,14 @@ const StudyMode = () => {
   const percentage = ((DEFAULT_TIMES[mode] - time) / DEFAULT_TIMES[mode]) * 100;
 
   return (
-    <div className="flex bg-black flex-col items-center justify-center h-screen w-full text-white studymode">
+    <div className="flex h-screen">
+      <div className="w-20">
         <Nav />
-      <div className="flex space-x-4 mb-6">
+      </div>
+    
+      <div className="flex-1 flex pt-16 bg-black flex-col items-center justify-center h-full w-screen text-white studymode">
+      
+      <div className="flex space-x-4 mb-6 ">
         {["Pomodoro", "Short Break", "Long Break"].map((item) => (
           <button
             key={item}
@@ -112,6 +117,8 @@ const StudyMode = () => {
         </button>
       </div>
     </div>
+    </div>
+    
   );
 };
 

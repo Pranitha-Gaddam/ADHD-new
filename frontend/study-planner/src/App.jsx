@@ -15,11 +15,12 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/" element={<Navigate to="/auth" />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/auth" element={<AuthContainer />} />
         <Route path="/study-mode" element={<StudyMode />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        
       </Routes>
     </Router>
   );

@@ -32,7 +32,7 @@ const Navbar = ({
   };
 
   return (
-    <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
+    <div className="fixed top-0 w-screen bg-white flex items-center justify-between px-6 py-2 drop-shadow z-40">
       <h2 className="text-xl font-medium text-black py-2">Study Planner</h2>
 
       {showSearchBar && (

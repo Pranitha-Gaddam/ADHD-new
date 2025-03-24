@@ -10,7 +10,7 @@ import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop'
 import { createEventModalPlugin } from '@schedule-x/event-modal'
 import '@schedule-x/theme-default/dist/index.css'
 import React, { useEffect, useState } from 'react'
-
+//import './Calendar.css'
 function CalendarApp() {
   const eventsService = useState(() => createEventsServicePlugin())[0]
   // const plugins = [createDragAndDropPlugin(), createEventModalPlugin()]
@@ -47,7 +47,7 @@ function CalendarApp() {
         calendarId: 'personal',
       },
       {
-        id: 1,
+        id:2,
         title: 'Event 2',
         start: '2025-03-18', //due date
         end: '2025-03-18',
@@ -63,9 +63,11 @@ function CalendarApp() {
   // eventModal.close(); // close the modal
  
   return (
-    <div>
+    <div >
       <ScheduleXCalendar calendarApp={calendar} />
     </div>
+    
+
   )
 }
  
