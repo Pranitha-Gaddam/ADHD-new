@@ -165,9 +165,11 @@ const AddEditTasks = ({
           selected={dueDate}
           onChange={(date) => setDueDate(date)}
           showTimeSelect
-          timeIntervals={1}
-          dateFormat="Pp"
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="MMMM d, yyyy h:mm aa"
           className="ml-2 text-sm text-slate-950 outline bg-slate-100 p-2 rounded"
+          minDate={new Date()}
         />
       </div>
       {/* <div className="mt-3">
