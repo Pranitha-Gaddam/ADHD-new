@@ -134,7 +134,7 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 // Add Task
 app.post("/add-task", authenticateToken, async (req, res) => {
-  const { title, content, tags, isCompleted } = req.body;
+  const { title, content, tags, isCompleted, dueDate } = req.body;
   const { user } = req.user;
 
   if (!title) {
@@ -148,6 +148,7 @@ app.post("/add-task", authenticateToken, async (req, res) => {
       tags: tags || [],
       isCompleted: isCompleted || false, // Ensure isCompleted is handled
       userId: user._id,
+      dueDate: dueDate || null,
     });
 
     await task.save();
@@ -165,7 +166,7 @@ app.post("/add-task", authenticateToken, async (req, res) => {
 // Edit Task
 app.put("/edit-task/:taskId", authenticateToken, async (req, res) => {
   const taskId = req.params.taskId;
-  const { title, content, tags, isPinned, isCompleted } = req.body; // Add isCompleted to the destructuring
+  const { title, content, tags, isPinned, isCompleted, dueDate } = req.body; // Add isCompleted to the destructuring
   const { user } = req.user;
 
   if (
@@ -173,7 +174,8 @@ app.put("/edit-task/:taskId", authenticateToken, async (req, res) => {
     !content &&
     !tags &&
     isPinned === undefined &&
-    isCompleted === undefined
+    isCompleted === undefined &&
+    !dueDate // Check if all fields are undefined or null
   ) {
     return res
       .status(400)
@@ -192,6 +194,7 @@ app.put("/edit-task/:taskId", authenticateToken, async (req, res) => {
     if (tags) task.tags = tags;
     if (isPinned !== undefined) task.isPinned = isPinned;
     if (isCompleted !== undefined) task.isCompleted = isCompleted; // Ensure isCompleted is handled
+    if (dueDate !== undefined) task.dueDate = dueDate; // Add this line to update dueDate
 
     await task.save();
 
