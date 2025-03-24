@@ -53,7 +53,54 @@ const Home = () => {
   const handleCloseToast = () => {
     setShowToastMsg({ isShown: false, message: "" });
   };
+  
+  const checkDueDates = () => {
+    const now = new Date();
+    const notificationThreshold = 15 * 60 * 1000; // 15 minutes before due date
 
+    console.log("Checking due dates at:", now.toLocaleTimeString());
+    console.log("Total tasks:", allTasks.length);
+
+    allTasks.forEach((task) => {
+      console.log(`Task: ${task.title}, ID: ${task._id}`);
+      console.log("Due Date Raw:", task.dueDate);
+
+      console.log("Is Completed:", task.isCompleted);
+      console.log("Notified:", notifiedTasks.includes(task._id));
+
+      if (
+        task.dueDate &&
+        !task.isCompleted &&
+        !notifiedTasks.includes(task._id)
+      ) {
+        const dueDate = new Date(task.dueDate);
+        const timeDifference = dueDate - now;
+
+        console.log(
+          `Due: ${dueDate.toLocaleTimeString()}, Time Diff: ${(
+            timeDifference / 1000
+          ).toFixed(0)} seconds`
+        );
+
+        if (timeDifference >= 0 && timeDifference <= notificationThreshold) {
+          showToastMessage(
+            `Task "${
+              task.title
+            }" is due in 15 minutes! Due: ${dueDate.toLocaleTimeString()}`,
+            "warning"
+          );
+          setNotifiedTasks((prev) => [...prev, task._id]);
+        } else {
+          console.log("Task not within 15-minute threshold");
+        }
+      } else {
+        console.log(
+          "Task skipped: No due date, completed, or already notified"
+        );
+      }
+    });
+  };
+  
   // Get user info
   const getUserInfo = async () => {
     try {
@@ -76,6 +123,7 @@ const Home = () => {
 
       if (response.data && response.data.tasks) {
         setAllTasks(response.data.tasks);
+        checkDueDates();
       }
     } catch {
       console.log("An unexpected error occurred. Please try again.");
@@ -206,7 +254,14 @@ const Home = () => {
     getAllTasks();
     getUserInfo();
     getAllHabits();
-    return () => {};
+
+    const intervalId = setInterval(() => {
+      getAllTasks;
+    }, 60 * 1000); // Check due dates every minute.
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   const incompleteTasks = allTasks.filter((task) => !task.isCompleted);
