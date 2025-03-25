@@ -16,11 +16,7 @@ import Habits from "../../components/Habits/Habits"; // Import the Habits compon
 import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
-<<<<<<< HEAD
-import { format, parseISO } from "date-fns";
-=======
 import Tooltip from "../../components/Tooltip/Tooltip"; // Import the Tooltip component
->>>>>>> cbee92bb3f192e13aa7081b48218a872f5bba04e
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({

@@ -117,16 +117,9 @@ const CalendarPage = () => {
       <div className="w-1/6 flex flex-col p-4">
         <div className="pb-10">
           <h1>Task List</h1>
-<<<<<<< HEAD
-          <ul>
-            {tasks.map((task) => {
-              console.log("Task Due Date:", task.dueDate); // Log the due date
-              return (
-=======
           {incompleteTasks.length > 0 ? (
             <ul>
               {incompleteTasks.map((task) => (
->>>>>>> cbee92bb3f192e13aa7081b48218a872f5bba04e
                 <NoteCard
                   key={task._id}
                   title={task.title}
@@ -141,11 +134,6 @@ const CalendarPage = () => {
                   onPinNote={() => updateIsPinned(task)}
                   onToggleComplete={() => updateIsCompleted(task)}
                 />
-<<<<<<< HEAD
-              );
-            })}
-          </ul>
-=======
               ))}
             </ul>
           ) : (
@@ -154,7 +142,6 @@ const CalendarPage = () => {
               message={`Create your first task—whether it’s big or small, every step counts!`}
             />
           )}
->>>>>>> cbee92bb3f192e13aa7081b48218a872f5bba04e
         </div>
         <div className="pb-10">
           <h1>Completed Tasks</h1>
