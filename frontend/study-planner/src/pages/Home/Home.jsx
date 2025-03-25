@@ -1,3 +1,4 @@
+// filepath: c:\Users\thien\Downloads\ADHD-0324\ADHD-main\frontend\study-planner\src\pages\Home\Home.jsx
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
@@ -15,6 +16,7 @@ import Habits from "../../components/Habits/Habits"; // Import the Habits compon
 import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
+import Tooltip from "../../components/Tooltip/Tooltip"; // Import the Tooltip component
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -291,18 +293,21 @@ const Home = () => {
           <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold">My Tasks</h2>
-              <button
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
-                onClick={() => {
-                  setOpenAddEditModal({
-                    isShown: true,
-                    type: "add",
-                    data: null,
-                  });
-                }}
-              >
-                <MdAdd className="text-white text-[20px]" />
-              </button>
+              <div className="relative group">
+                <button
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
+                  onClick={() => {
+                    setOpenAddEditModal({
+                      isShown: true,
+                      type: "add",
+                      data: null,
+                    });
+                  }}
+                >
+                  <MdAdd className="text-white text-[20px]" />
+                </button>
+                <Tooltip text="Add Task" />
+              </div>
             </div>
             {incompleteTasks.length > 0 ? (
               <div className="flex flex-col gap-4">
@@ -350,7 +355,6 @@ const Home = () => {
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
                     onDelete={() => deleteTask(item)}
-                    // onPinNote={() => updateIsPinned(item)}
                     onToggleComplete={() => updateIsCompleted(item)}
                   />
                 ))}
