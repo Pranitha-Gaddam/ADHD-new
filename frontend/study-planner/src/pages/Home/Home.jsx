@@ -271,7 +271,7 @@ const Home = () => {
   const completedTasks = allTasks.filter((task) => task.isCompleted);
 
   return (
-    <div className="h-screen flex flex-col z-40">
+    <div className="min-h-screen flex flex-col z-40">
       <div className="h-35">
         <Navbar
           userInfo={userInfo}
