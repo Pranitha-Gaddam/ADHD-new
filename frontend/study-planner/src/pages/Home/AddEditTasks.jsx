@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MdClose } from "react-icons/md";
 import TagInput from "../../components/Input/TagInput"; // Adjust the import path as needed
+import { format } from "date-fns";
 
 const AddEditTasks = ({
   noteData,
@@ -43,15 +44,17 @@ const AddEditTasks = ({
   // Add Task
   const addNewTask = async () => {
     try {
+      const formattedDueDate = dueDate ? format(dueDate, "yyyy-MM-dd HH:mm") : null;
       const response = await axiosInstance.post("/add-task", {
         title: title,
         content: content,
         tags: tags,
-        dueDate: dueDate,
+        dueDate: formattedDueDate,
         //  reminderTime: reminderTime,
       });
 
       if (response.data && response.data.task) {
+        console.log("Task added with due date:", formattedDueDate); // Log the formatted due date
         showToastMessage("Task added successfully");
         getAllTasks();
         onClose();
@@ -71,11 +74,12 @@ const AddEditTasks = ({
   // Edit Task
   const editTask = async () => {
     try {
+      const formattedDueDate = dueDate ? format(dueDate, "yyyy-MM-dd HH:mm") : null;
       const response = await axiosInstance.put(`/edit-task/${noteData._id}`, {
         title: title,
         content: content,
         tags: tags,
-        dueDate: dueDate,
+        dueDate: formattedDueDate,
         //  reminderTime: reminderTime,
       });
 
@@ -167,7 +171,7 @@ const AddEditTasks = ({
           showTimeSelect
           timeFormat="HH:mm"
           timeIntervals={15}
-          dateFormat="MMMM d, yyyy h:mm aa"
+          dateFormat="yyyy-MM-dd HH:mm"
           className="ml-2 text-sm text-slate-950 outline bg-slate-100 p-2 rounded"
           minDate={new Date()}
         />

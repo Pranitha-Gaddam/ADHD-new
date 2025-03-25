@@ -10,15 +10,29 @@ import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop'
 import { createEventModalPlugin } from '@schedule-x/event-modal'
 import '@schedule-x/theme-default/dist/index.css'
 import React, { useEffect, useState } from 'react'
-//import './Calendar.css'
-function CalendarApp() {
+import { format } from 'date-fns'
+
+function formatDateToDesiredFormat(dateString) {
+  const parsedDate = new Date(dateString)
+  if (isNaN(parsedDate)) {
+    return '2025-01-01 00:00'
+  }
+  return format(parsedDate, 'yyyy-MM-dd HH:mm')
+}
+
+function CalendarApp(props) {
+  // Initialize the event service plugin separately
   const eventsService = useState(() => createEventsServicePlugin())[0]
-  // const plugins = [createDragAndDropPlugin(), createEventModalPlugin()]
-  // the calander view
+
+  // Create calendar instance
   const calendar = useCalendarApp({
     defaultView: viewWeek.name,
     views: [viewWeek, viewDay, viewMonthGrid, viewMonthAgenda],
-    plugins: [createDragAndDropPlugin(), createEventModalPlugin()],
+    plugins: [
+      createDragAndDropPlugin(),
+      createEventModalPlugin(),
+      eventsService,
+    ],
     calendars: {
       personal: {
         colorName: 'personal',
@@ -34,41 +48,36 @@ function CalendarApp() {
         },
       },
     },
-    events: [
-      {
-        id: 1,
-        title: 'Event 1',
-        start: '2025-11-18', //due date
-        end: '2025-11-18',
-        description: 'Description 1',
-        hardLevel: 'Hard',
-        completeLevel: 'Complete',
-        duration: '2 hours',
-        calendarId: 'personal',
-      },
-      {
-        id:2,
-        title: 'Event 2',
-        start: '2025-03-18', //due date
-        end: '2025-03-18',
-        description: 'Description 1',
-        hardLevel: 'Hard',
-        completeLevel: 'Complete',
-        duration: '2 hours',
-        calendarId: 'personal',
-      }
-    ],
   })
 
-  // eventModal.close(); // close the modal
- 
+  // Add events after calendar is initialized and tasks change
+  useEffect(() => {
+    if (!props.tasks || props.tasks.length === 0) return
+
+    props.tasks.forEach((task, index) => {
+      const startdate = formatDateToDesiredFormat(task.dueDate || '2025-03-25 08:00')
+      const enddate = formatDateToDesiredFormat(task.dueDate || '2025-03-25 12:00')
+
+      const newEvent = {
+        id: String(index + 1),
+        title: task.title || 'Untitled Event',
+        start: startdate,
+        end: enddate,
+        calendarId: 'personal',
+      }
+
+      console.log('Adding event:', newEvent)
+
+      // Add to calendar
+      eventsService.add(newEvent)
+    })
+  }, [props.tasks, eventsService])
+
   return (
-    <div >
+    <div>
       <ScheduleXCalendar calendarApp={calendar} />
     </div>
-    
-
   )
 }
- 
-export default CalendarApp;
+
+export default CalendarApp

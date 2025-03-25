@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CalendarApp from "../../components/Calendar/Calendar";
 import Nav from "../../components/Navbar/Nav";
+
 import NoteCard from "../../components/Cards/NoteCard";
 import axiosInstance from "../../utils/axiosInstance";
 
@@ -52,7 +53,7 @@ const CalendarPage = () => {
 
       {/* Calendar on the right, fills remaining space */}
       <div className="flex-1">
-        <CalendarApp />
+        <CalendarApp tasks={tasks}/>
       </div>
 
       {/* task list and add task list */}
@@ -60,22 +61,25 @@ const CalendarPage = () => {
         <div className="pb-10">
           <h1>Task List</h1>
           <ul>
-            {tasks.map((task) => (
-              <NoteCard
-                key={task._id}
-                title={task.title}
-                content={task.content}
-                tags={task.tags}
-                dueDate={task.dueDate}
-                reminderTime={task.reminderTime}
-                isPinned={task.isPinned}
-                isCompleted={task.isCompleted}
-                onEdit={() => handleEdit(task)}
-                onDelete={() => deleteTask(task)}
-                onPinNote={() => updateIsPinned(task)}
-                onToggleComplete={() => updateIsCompleted(task)}
-              />
-            ))}
+            {tasks.map((task) => {
+              console.log("Task Due Date:", task.dueDate); // Log the due date
+              return (
+                <NoteCard
+                  key={task._id}
+                  title={task.title}
+                  content={task.content}
+                  tags={task.tags}
+                  dueDate={task.dueDate}
+                  reminderTime={task.reminderTime}
+                  isPinned={task.isPinned}
+                  isCompleted={task.isCompleted}
+                  onEdit={() => handleEdit(task)}
+                  onDelete={() => deleteTask(task)}
+                  onPinNote={() => updateIsPinned(task)}
+                  onToggleComplete={() => updateIsCompleted(task)}
+                />
+              );
+            })}
           </ul>
         </div>
         <div>

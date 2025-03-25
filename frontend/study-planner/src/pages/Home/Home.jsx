@@ -15,6 +15,7 @@ import Habits from "../../components/Habits/Habits"; // Import the Habits compon
 import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
+import { format, parseISO } from "date-fns";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -58,35 +59,29 @@ const Home = () => {
     const now = new Date();
     const notificationThreshold = 15 * 60 * 1000; // 15 minutes before due date
 
-    console.log("Checking due dates at:", now.toLocaleTimeString());
+    console.log("Checking due dates at:", format(now, "yyyy-MM-dd HH:mm"));
     console.log("Total tasks:", allTasks.length);
 
     allTasks.forEach((task) => {
       console.log(`Task: ${task.title}, ID: ${task._id}`);
       console.log("Due Date Raw:", task.dueDate);
 
-      console.log("Is Completed:", task.isCompleted);
-      console.log("Notified:", notifiedTasks.includes(task._id));
-
-      if (
-        task.dueDate &&
-        !task.isCompleted &&
-        !notifiedTasks.includes(task._id)
-      ) {
-        const dueDate = new Date(task.dueDate);
+      if (task.dueDate && !task.isCompleted && !notifiedTasks.includes(task._id)) {
+        const dueDate = parseISO(task.dueDate); // Parse ISO string as UTC
         const timeDifference = dueDate - now;
 
         console.log(
-          `Due: ${dueDate.toLocaleTimeString()}, Time Diff: ${(
+          `Due: ${format(dueDate, "yyyy-MM-dd HH:mm")}, Time Diff: ${(
             timeDifference / 1000
           ).toFixed(0)} seconds`
         );
 
         if (timeDifference >= 0 && timeDifference <= notificationThreshold) {
           showToastMessage(
-            `Task "${
-              task.title
-            }" is due in 15 minutes! Due: ${dueDate.toLocaleTimeString()}`,
+            `Task "${task.title}" is due in 15 minutes! Due: ${format(
+              dueDate,
+              "yyyy-MM-dd HH:mm"
+            )}`,
             "warning"
           );
           setNotifiedTasks((prev) => [...prev, task._id]);
@@ -94,9 +89,7 @@ const Home = () => {
           console.log("Task not within 15-minute threshold");
         }
       } else {
-        console.log(
-          "Task skipped: No due date, completed, or already notified"
-        );
+        console.log("Task skipped: No due date, completed, or already notified");
       }
     });
   };
