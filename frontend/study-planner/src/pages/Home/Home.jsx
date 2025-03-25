@@ -1,3 +1,4 @@
+// filepath: c:\Users\thien\Downloads\ADHD-0324\ADHD-main\frontend\study-planner\src\pages\Home\Home.jsx
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
@@ -15,7 +16,11 @@ import Habits from "../../components/Habits/Habits"; // Import the Habits compon
 import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
+<<<<<<< HEAD
 import { format, parseISO } from "date-fns";
+=======
+import Tooltip from "../../components/Tooltip/Tooltip"; // Import the Tooltip component
+>>>>>>> cbee92bb3f192e13aa7081b48218a872f5bba04e
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -41,6 +46,7 @@ const Home = () => {
   const [allHabits, setAllHabits] = useState([]);
 
   const [isSearch, setIsSearch] = useState(false);
+  const [notifiedTasks, setNotifiedTasks] = useState([]);
   const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
@@ -54,7 +60,7 @@ const Home = () => {
   const handleCloseToast = () => {
     setShowToastMsg({ isShown: false, message: "" });
   };
-  
+
   const checkDueDates = () => {
     const now = new Date();
     const notificationThreshold = 15 * 60 * 1000; // 15 minutes before due date
@@ -93,7 +99,7 @@ const Home = () => {
       }
     });
   };
-  
+
   // Get user info
   const getUserInfo = async () => {
     try {
@@ -261,7 +267,7 @@ const Home = () => {
   const completedTasks = allTasks.filter((task) => task.isCompleted);
 
   return (
-    <div clasName="h-screen flex flex-col z-40">
+    <div className="min-h-screen flex flex-col z-40">
       <div className="h-35">
         <Navbar
           userInfo={userInfo}
@@ -270,19 +276,35 @@ const Home = () => {
           showSearchBar={true}
         />
       </div>
-      
-      
+
       <div className="flex-1 flex flex-row">
         {/* <Nav /> */}
         <div className="w-20 ml-4">
           <Nav />
         </div>
-        
+
         <div className="flex-1">
           {userInfo && <GreetingCard username={userInfo.fullName} />}{" "}
           {/* Display the GreetingCard */}
           <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
-            <h2 className="text-2xl font-bold mb-4">My Tasks</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">My Tasks</h2>
+              <div className="relative group">
+                <button
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
+                  onClick={() => {
+                    setOpenAddEditModal({
+                      isShown: true,
+                      type: "add",
+                      data: null,
+                    });
+                  }}
+                >
+                  <MdAdd className="text-white text-[20px]" />
+                </button>
+                <Tooltip text="Add Task" />
+              </div>
+            </div>
             {incompleteTasks.length > 0 ? (
               <div className="flex flex-col gap-4">
                 {incompleteTasks.map((item) => (
@@ -329,7 +351,6 @@ const Home = () => {
                     isCompleted={item.isCompleted}
                     onEdit={() => handleEdit(item)}
                     onDelete={() => deleteTask(item)}
-                    // onPinNote={() => updateIsPinned(item)}
                     onToggleComplete={() => updateIsCompleted(item)}
                   />
                 ))}
@@ -404,23 +425,6 @@ const Home = () => {
               showToastMessage={showToastMessage}
             />
           </Modal>
-        </div>
-      </div>
-      <div className="relative">
-        <div className="relative group">
-          <button
-            className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500 hover:bg-blue-600 fixed right-10 bottom-10"
-            onClick={() => {
-              setOpenAddEditModal({ isShown: true, type: "add", data: null });
-            }}
-          >
-            <div className="relative">
-              <MdAdd className="text-white text-[32px]" />
-              <span className="absolute right-full mr-2 w-max opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-blue-600 text-white text-sm rounded py-1 px-2">
-                New Task
-              </span>
-            </div>
-          </button>
         </div>
       </div>
 
