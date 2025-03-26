@@ -417,16 +417,24 @@ app.post(
 );
 
 // Edit habit
+// Edit habit
 app.put(
   "/edit-habit/:habitId",
   authenticateToken,
   validateHabitInput,
   async (req, res) => {
     const habitId = req.params.habitId;
-    const { name, goal, repeat, color, notify } = req.body;
+    const { name, goal, repeat, color, notify, progress } = req.body; // Extract progress from the request body
     const { user } = req.user;
 
-    if (!name && !goal && !repeat && !color && !notify) {
+    if (
+      !name &&
+      !goal &&
+      !repeat &&
+      !color &&
+      !notify &&
+      progress === undefined
+    ) {
       return res
         .status(400)
         .json({ error: true, message: "No changes provided" });
@@ -446,7 +454,7 @@ app.put(
       if (repeat) habit.repeat = repeat;
       if (color) habit.color = color;
       if (notify) habit.notify = notify;
-      if (progress) habit.progress = progress;
+      if (progress !== undefined) habit.progress = progress; // Update progress only if it's provided
 
       await habit.save();
 
