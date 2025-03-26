@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CalendarApp from "../../components/Calendar/Calendar";
 import Nav from "../../components/Navbar/Nav";
-
 import NoteCard from "../../components/Cards/NoteCard";
 import axiosInstance from "../../utils/axiosInstance";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
@@ -13,6 +12,7 @@ import AddEditTasks from "../Home/AddEditTasks";
 import Toast from "../../components/ToastMessage/Toast";
 
 const CalendarPage = () => {
+  // [Previous state declarations remain unchanged]
   const [tasks, setTasks] = useState([]);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
@@ -25,6 +25,7 @@ const CalendarPage = () => {
     data: null,
   });
 
+  // [Previous functions remain unchanged]
   const handleEdit = (task) => {
     setOpenAddEditModal({ isShown: true, data: task, type: "edit" });
   };
@@ -103,18 +104,34 @@ const CalendarPage = () => {
 
   return (
     <div className="flex h-screen pt-15">
-      {/* Navbar on the left, takes only the space it needs */}
+      {/* Navbar on the left */}
       <div className="w-20">
         <Nav />
       </div>
 
-      {/* Calendar on the right, fills remaining space */}
+      {/* Calendar in the center */}
       <div className="flex-1">
         <CalendarApp tasks={tasks} />
       </div>
 
-      {/* task list and add task list */}
+      {/* Right panel with Add Task above Task Lists */}
       <div className="w-1/6 flex flex-col p-4">
+        {/* Add Task Section - Moved to Top */}
+        <div className="pb-10">
+          <div className="flex items-center justify-between">
+            <h1>Add Task</h1>
+            <button
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
+              onClick={() => {
+                setOpenAddEditModal({ isShown: true, type: "add", data: null });
+              }}
+            >
+              <MdAdd className="text-white text-[24px]" />
+            </button>
+          </div>
+        </div>
+
+        {/* Incomplete Tasks Section */}
         <div className="pb-10">
           <h1>Task List</h1>
           {incompleteTasks.length > 0 ? (
@@ -143,6 +160,8 @@ const CalendarPage = () => {
             />
           )}
         </div>
+
+        {/* Completed Tasks Section */}
         <div className="pb-10">
           <h1>Completed Tasks</h1>
           {completedTasks.length > 0 ? (
@@ -170,19 +189,9 @@ const CalendarPage = () => {
             />
           )}
         </div>
-        <div className="flex items-center justify-between">
-          <h1>Add Task</h1>
-          <button
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
-            onClick={() => {
-              setOpenAddEditModal({ isShown: true, type: "add", data: null });
-            }}
-          >
-            <MdAdd className="text-white text-[24px]" />
-          </button>
-        </div>
       </div>
 
+      {/* Modal and Toast components remain unchanged */}
       <Modal
         isOpen={openAddEditModal.isShown}
         onRequestClose={() => {
@@ -191,10 +200,10 @@ const CalendarPage = () => {
         style={{
           overlay: {
             backgroundColor: "rgba(0,0,0,0.2)",
-            zIndex: 1000, // Ensure the overlay is on top
+            zIndex: 1000,
           },
           content: {
-            zIndex: 1001, // Ensure the modal content is on top
+            zIndex: 1001,
           },
         }}
         contentLabel=""
