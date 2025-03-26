@@ -163,10 +163,6 @@ const AddEditHabits = ({
           <option value="weekdays">Weekdays</option>
           <option value="weekly">Weekly</option>
           <option value="biweekly">Biweekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="every 3 months">Every 3 months</option>
-          <option value="every 6 months">Every 6 months</option>
-          <option value="yearly">Yearly</option>
         </select>
       </div>
       <div className="flex flex-col my-4">

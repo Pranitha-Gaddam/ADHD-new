@@ -75,9 +75,9 @@ function CalendarApp({ tasks, habits }) {
     }
     return dates;
   };
-  // Helper function to determine if a habit should appear on a specific date
   const shouldAddHabitEvent = (habit, date) => {
     const dayOfWeek = date.getDay();
+
     switch (habit.repeat) {
       case "daily":
         return true;
@@ -85,9 +85,27 @@ function CalendarApp({ tasks, habits }) {
         return dayOfWeek >= 1 && dayOfWeek <= 5; // Monday to Friday
       case "weekends":
         return dayOfWeek === 0 || dayOfWeek === 6; // Saturday and Sunday
+      case "weekly":
+        return isSameDayOfWeek(habit.createdOn, date); // Same day of the week as the habit creation date
+      case "biweekly":
+        return isNthWeekFromStart(habit.createdOn, date, 2); // Every 2 weeks
+
       default:
         return false;
     }
+  };
+
+  // Helper function to check if the date is the same day of the week as the start date
+  const isSameDayOfWeek = (startDate, date) => {
+    const startDayOfWeek = new Date(startDate).getDay();
+    return startDayOfWeek === date.getDay();
+  };
+
+  // Helper function to check if the date is the nth week from the start date
+  const isNthWeekFromStart = (startDate, date, n) => {
+    const start = new Date(startDate);
+    const diffInDays = Math.floor((date - start) / (1000 * 60 * 60 * 24));
+    return diffInDays >= 0 && diffInDays % (n * 7) === 0; // Check if the difference in days is a multiple of n weeks
   };
 
   // Sync events with tasks and habits whenever they change
@@ -109,9 +127,6 @@ function CalendarApp({ tasks, habits }) {
       // Combine tasks and habits into a single list of events
       const allEvents = [];
 
-      // Add tasks to the events list
-      // Add tasks to the events list
-      // Add tasks to the events list
       if (tasks && tasks.length > 0) {
         console.log("Adding tasks to events...");
         tasks.forEach((task, index) => {

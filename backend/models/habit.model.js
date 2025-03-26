@@ -6,17 +6,7 @@ const habitSchema = new Schema({
   name: { type: String, required: true },
   repeat: {
     type: String,
-    enum: [
-      "daily",
-      "weekends",
-      "weekdays",
-      "weekly",
-      "biweekly",
-      "monthly",
-      "every 3 months",
-      "every 6 months",
-      "yearly",
-    ],
+    enum: ["daily", "weekends", "weekdays", "weekly", "biweekly"],
     default: "daily",
   },
   progress: { type: Number, default: 0 },
