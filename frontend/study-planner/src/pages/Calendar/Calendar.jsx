@@ -3,16 +3,12 @@ import CalendarApp from "../../components/Calendar/Calendar";
 import Nav from "../../components/Navbar/Nav";
 import NoteCard from "../../components/Cards/NoteCard";
 import axiosInstance from "../../utils/axiosInstance";
-import EmptyCard from "../../components/EmptyCard/EmptyCard";
-import AddTaskImg from "../../assets/images/add_task.svg";
-import NoDataImg from "../../assets/images/no_task.svg";
 import Modal from "react-modal";
 import { MdAdd } from "react-icons/md";
 import AddEditTasks from "../Home/AddEditTasks";
 import Toast from "../../components/ToastMessage/Toast";
 
 const CalendarPage = () => {
-  // [Previous state declarations remain unchanged]
   const [tasks, setTasks] = useState([]);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
@@ -25,7 +21,6 @@ const CalendarPage = () => {
     data: null,
   });
 
-  // [Previous functions remain unchanged]
   const handleEdit = (task) => {
     setOpenAddEditModal({ isShown: true, data: task, type: "edit" });
   };
@@ -116,7 +111,7 @@ const CalendarPage = () => {
 
       {/* Right panel with Add Task above Task Lists */}
       <div className="w-1/6 flex flex-col p-4">
-        {/* Add Task Section - Moved to Top */}
+        {/* Add Task Section */}
         <div className="pb-10">
           <div className="flex items-center justify-between">
             <h1>Add Task</h1>
@@ -154,10 +149,7 @@ const CalendarPage = () => {
               ))}
             </ul>
           ) : (
-            <EmptyCard
-              imgSrc={AddTaskImg}
-              message={`Create your first task—whether it’s big or small, every step counts!`}
-            />
+            <p className="text-gray-500 mt-2">Task list is empty</p>
           )}
         </div>
 
@@ -183,15 +175,12 @@ const CalendarPage = () => {
               ))}
             </ul>
           ) : (
-            <EmptyCard
-              imgSrc={AddTaskImg}
-              message={`Complete a task to see it here!`}
-            />
+            <p className="text-gray-500 mt-2">Completed task list is empty</p>
           )}
         </div>
       </div>
 
-      {/* Modal and Toast components remain unchanged */}
+      {/* Modal */}
       <Modal
         isOpen={openAddEditModal.isShown}
         onRequestClose={() => {
@@ -220,6 +209,7 @@ const CalendarPage = () => {
         />
       </Modal>
 
+      {/* Toast */}
       <div className="fixed top-4 right-4 z-50">
         <Toast
           isShown={showToastMsg.isShown}
