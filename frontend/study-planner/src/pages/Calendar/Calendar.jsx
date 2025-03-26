@@ -110,7 +110,7 @@ const CalendarPage = () => {
 
       {/* Calendar on the right, fills remaining space */}
       <div className="flex-1">
-        <CalendarApp tasks={tasks}/>
+        <CalendarApp tasks={tasks} />
       </div>
 
       {/* task list and add task list */}
@@ -211,12 +211,14 @@ const CalendarPage = () => {
         />
       </Modal>
 
-      <Toast
-        isShown={showToastMsg.isShown}
-        message={showToastMsg.message}
-        type={showToastMsg.type}
-        onClose={handleCloseToast}
-      />
+      <div className="fixed top-4 right-4 z-50">
+        <Toast
+          isShown={showToastMsg.isShown}
+          message={showToastMsg.message}
+          type={showToastMsg.type}
+          onClose={handleCloseToast}
+        />
+      </div>
     </div>
   );
 };
