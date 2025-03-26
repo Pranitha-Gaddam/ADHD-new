@@ -15,7 +15,7 @@ const Habits = ({
   return (
     <div className="flex flex-col items-center p-4 bg-white rounded-lg relative group">
       <div className="flex gap-4 mt-2 overflow-x-auto">
-        <div className="flex flex-col items-center rounded-lg relative group hover:bg-gray-200 shadow-xl transition-all ease-in-out">
+        <div className="flex flex-col items-center pt-5 rounded-lg relative group hover:bg-gray-200 shadow-xl transition-all ease-in-out">
           <button
             onClick={onEditHabit}
             className="absolute top-0 left-0 mt-1 ml-1 text-gray-500 hover:text-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200"

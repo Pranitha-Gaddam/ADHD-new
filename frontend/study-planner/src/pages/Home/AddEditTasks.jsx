@@ -44,7 +44,9 @@ const AddEditTasks = ({
   // Add Task
   const addNewTask = async () => {
     try {
-      const formattedDueDate = dueDate ? format(dueDate, "yyyy-MM-dd HH:mm") : null;
+      const formattedDueDate = dueDate
+        ? format(dueDate, "yyyy-MM-dd HH:mm")
+        : null;
       const response = await axiosInstance.post("/add-task", {
         title: title,
         content: content,
@@ -74,7 +76,9 @@ const AddEditTasks = ({
   // Edit Task
   const editTask = async () => {
     try {
-      const formattedDueDate = dueDate ? format(dueDate, "yyyy-MM-dd HH:mm") : null;
+      const formattedDueDate = dueDate
+        ? format(dueDate, "yyyy-MM-dd HH:mm")
+        : null;
       const response = await axiosInstance.put(`/edit-task/${noteData._id}`, {
         title: title,
         content: content,
@@ -170,7 +174,7 @@ const AddEditTasks = ({
           onChange={(date) => setDueDate(date)}
           showTimeSelect
           timeFormat="HH:mm"
-          timeIntervals={15}
+          timeIntervals={5}
           dateFormat="yyyy-MM-dd HH:mm"
           className="ml-2 text-sm text-slate-950 outline bg-slate-100 p-2 rounded"
           minDate={new Date()}

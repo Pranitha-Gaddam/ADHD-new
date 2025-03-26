@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdCheck } from "react-icons/md";
 import AddEditTasks from "./AddEditTasks";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
 import Tooltip from "../../components/Tooltip/Tooltip"; // Import the Tooltip component
+import { parseISO, format } from "date-fns"; // Import parseISO and format from date-fns
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -56,7 +57,29 @@ const Home = () => {
   const handleCloseToast = () => {
     setShowToastMsg({ isShown: false, message: "" });
   };
+  const handleUpdateProgress = async (habit) => {
+    if (habit.progress >= habit.goal) {
+      showToastMessage("Progress cannot exceed the goal!", "error");
+      return;
+    }
 
+    try {
+      const response = await axiosInstance.put(
+        `/update-habit-progress/${habit._id}`,
+        {
+          progress: habit.progress + 1, // Increment progress by 1
+        }
+      );
+
+      if (response.data && response.data.habit) {
+        showToastMessage("Progress updated successfully!", "success");
+        getAllHabits(); // Refresh habits
+      }
+    } catch (error) {
+      console.error("Error updating progress:", error.message);
+      showToastMessage("Failed to update progress. Please try again.", "error");
+    }
+  };
   const checkDueDates = () => {
     const now = new Date();
     const notificationThreshold = 15 * 60 * 1000; // 15 minutes before due date
@@ -68,7 +91,11 @@ const Home = () => {
       console.log(`Task: ${task.title}, ID: ${task._id}`);
       console.log("Due Date Raw:", task.dueDate);
 
-      if (task.dueDate && !task.isCompleted && !notifiedTasks.includes(task._id)) {
+      if (
+        task.dueDate &&
+        !task.isCompleted &&
+        !notifiedTasks.includes(task._id)
+      ) {
         const dueDate = parseISO(task.dueDate); // Parse ISO string as UTC
         const timeDifference = dueDate - now;
 
@@ -91,7 +118,9 @@ const Home = () => {
           console.log("Task not within 15-minute threshold");
         }
       } else {
-        console.log("Task skipped: No due date, completed, or already notified");
+        console.log(
+          "Task skipped: No due date, completed, or already notified"
+        );
       }
     });
   };
@@ -363,36 +392,55 @@ const Home = () => {
             )}
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
-            <h2 className="text-2xl font-bold mb-4">Your Habits</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">Your Habits</h2>
+              <div className="relative group">
+                <button
+                  onClick={() => {
+                    setOpenAddEditHabitModal({
+                      isShown: true,
+                      type: "add",
+                      data: null,
+                    });
+                  }}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
+                >
+                  <MdAdd className="text-white text-[20px]" />
+                </button>
+                <Tooltip text="Add Habit" />
+              </div>
+            </div>
             <div className="flex gap-4 mt-2 overflow-x-auto">
-              <button
-                onClick={() => {
-                  setOpenAddEditHabitModal({
-                    isShown: true,
-                    type: "add",
-                    data: null,
-                  });
-                }}
-                className="flex flex-col items-center p-4 bg-white rounded-lg relative group"
-              >
-                <div className="w-16 h-16 flex items-center justify-center text-lg font-bold border-4 border-gray-700 rounded-full hover:bg-gray-300">
-                  <MdAdd className="text-[32px] text-gray-700" />
-                </div>
-                <span className="text-sm mt-1">Add Habit</span>
-              </button>
               {allHabits.map((item) => (
-                <Habits
+                <div
                   key={item._id}
-                  name={item.name}
-                  repeat={item.repeat}
-                  progress={item.progress}
-                  goal={item.goal}
-                  color={item.color}
-                  notify={item.notify}
-                  onEditHabit={() => handleEditHabit(item)}
-                  onDeleteHabit={() => deleteHabit(item)}
-                  onToggleHabit={() => {}}
-                />
+                  className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md"
+                >
+                  <Habits
+                    name={item.name}
+                    repeat={item.repeat}
+                    progress={item.progress}
+                    goal={item.goal}
+                    color={item.color}
+                    notify={item.notify}
+                    onEditHabit={() => handleEditHabit(item)}
+                    onDeleteHabit={() => deleteHabit(item)}
+                  />
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="relative group">
+                      <button
+                        onClick={() => handleUpdateProgress(item)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 hover:bg-green-600"
+                      >
+                        <MdCheck className="text-white text-[20px]" />
+                      </button>
+                      <Tooltip text="Update Progress" />
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      Progress: {item.progress}/{item.goal}
+                    </span>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
