@@ -1,21 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarApp from "../../components/Calendar/Calendar";
 import Nav from "../../components/Navbar/Nav";
 import NoteCard from "../../components/Cards/NoteCard";
 import axiosInstance from "../../utils/axiosInstance";
 import Modal from "react-modal";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdCheck } from "react-icons/md";
 import AddEditTasks from "../Home/AddEditTasks";
 import Toast from "../../components/ToastMessage/Toast";
+import Habits from "../../components/Habits/Habits";
+import AddEditHabits from "../../components/Habits/AddEditHabits";
+import Tooltip from "../../components/Tooltip/Tooltip";
 
 const CalendarPage = () => {
   const [tasks, setTasks] = useState([]);
+  const [allHabits, setAllHabits] = useState([]);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     type: "add",
     message: "",
   });
   const [openAddEditModal, setOpenAddEditModal] = useState({
+    isShown: false,
+    type: "add",
+    data: null,
+  });
+  const [openAddEditHabitModal, setOpenAddEditHabitModal] = useState({
     isShown: false,
     type: "add",
     data: null,
@@ -90,8 +99,66 @@ const CalendarPage = () => {
     }
   };
 
+  // Habits related functions
+  const getAllHabits = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-habits");
+      if (response.data && response.data.habits) {
+        setAllHabits(response.data.habits);
+      }
+    } catch {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const handleEditHabit = (habitDetails) => {
+    setOpenAddEditHabitModal({
+      isShown: true,
+      data: habitDetails,
+      type: "edit",
+    });
+  };
+
+  const deleteHabit = async (data) => {
+    const habitId = data._id;
+    try {
+      const response = await axiosInstance.delete("/delete-habit/" + habitId);
+      if (response.data && !response.data.error) {
+        getAllHabits();
+        showToastMessage("Habit Deleted Successfully!", "delete");
+      }
+    } catch (error) {
+      console.error("Error deleting habit:", error);
+    }
+  };
+
+  const handleUpdateProgress = async (habit) => {
+    if (habit.progress >= habit.goal) {
+      showToastMessage("Progress cannot exceed the goal!", "error");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.put(
+        `/update-habit-progress/${habit._id}`,
+        {
+          progress: habit.progress + 1,
+        }
+      );
+
+      if (response.data && response.data.habit) {
+        showToastMessage("Progress updated successfully!", "success");
+        getAllHabits();
+      }
+    } catch (error) {
+      console.error("Error updating progress:", error.message);
+      showToastMessage("Failed to update progress. Please try again.", "error");
+    }
+  };
+
   useEffect(() => {
     getAllTasks();
+    getAllHabits();
   }, []);
 
   const incompleteTasks = tasks.filter((task) => !task.isCompleted);
@@ -99,17 +166,14 @@ const CalendarPage = () => {
 
   return (
     <div className="flex h-screen pt-15">
-      {/* Navbar on the left */}
       <div className="w-20">
         <Nav />
       </div>
 
-      {/* Calendar in the center */}
       <div className="flex-1">
-        <CalendarApp tasks={tasks} />
+        <CalendarApp tasks={tasks} habits={allHabits} />
       </div>
 
-      {/* Right panel with Add Task above Task Lists */}
       <div className="w-1/6 flex flex-col p-4">
         {/* Add Task Section */}
         <div className="pb-10">
@@ -178,9 +242,68 @@ const CalendarPage = () => {
             <p className="text-gray-500 mt-2">Completed task list is empty</p>
           )}
         </div>
+
+        {/* Habits Section */}
+        <div className="pb-10">
+          <div className="flex items-center justify-between mb-4">
+            <h1>Your Habits</h1>
+            <div className="relative group">
+              <button
+                onClick={() => {
+                  setOpenAddEditHabitModal({
+                    isShown: true,
+                    type: "add",
+                    data: null,
+                  });
+                }}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
+              >
+                <MdAdd className="text-white text-[24px]" />
+              </button>
+              <Tooltip text="Add Habit" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-4">
+            {allHabits.length > 0 ? (
+              allHabits.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md"
+                >
+                  <Habits
+                    name={item.name}
+                    repeat={item.repeat}
+                    progress={item.progress}
+                    goal={item.goal}
+                    color={item.color}
+                    notify={item.notify}
+                    onEditHabit={() => handleEditHabit(item)}
+                    onDeleteHabit={() => deleteHabit(item)}
+                  />
+                  <div className="flex items-center gap-2">
+                    <div className="relative group">
+                      <button
+                        onClick={() => handleUpdateProgress(item)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 hover:bg-green-600"
+                      >
+                        <MdCheck className="text-white text-[20px]" />
+                      </button>
+                      <Tooltip text="Update Progress" />
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {item.progress}/{item.goal}
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 mt-2">No habits created yet</p>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Modal */}
+      {/* Task Modal */}
       <Modal
         isOpen={openAddEditModal.isShown}
         onRequestClose={() => {
@@ -209,7 +332,43 @@ const CalendarPage = () => {
         />
       </Modal>
 
-      {/* Toast */}
+      {/* Habit Modal */}
+      <Modal
+        isOpen={openAddEditHabitModal.isShown}
+        onRequestClose={() => {
+          setOpenAddEditHabitModal({
+            isShown: false,
+            type: "add",
+            data: null,
+          });
+        }}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2)",
+            zIndex: 1000,
+          },
+          content: {
+            zIndex: 1001,
+          },
+        }}
+        contentLabel=""
+        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow-scroll"
+      >
+        <AddEditHabits
+          type={openAddEditHabitModal.type}
+          habitData={openAddEditHabitModal.data}
+          onClose={() => {
+            setOpenAddEditHabitModal({
+              isShown: false,
+              type: "add",
+              data: null,
+            });
+          }}
+          getAllHabits={getAllHabits}
+          showToastMessage={showToastMessage}
+        />
+      </Modal>
+
       <div className="fixed top-4 right-4 z-50">
         <Toast
           isShown={showToastMsg.isShown}

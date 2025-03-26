@@ -24,6 +24,21 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
 
+const validateHabitInput = (req, res, next) => {
+  const { notify } = req.body;
+
+  if (
+    !Array.isArray(notify) ||
+    !notify.every((time) => /^([01]\d|2[0-3]):([0-5]\d)$/.test(time))
+  ) {
+    return res.status(400).json({
+      error: "Invalid notify format. Must be an array of HH:mm strings.",
+    });
+  }
+
+  next();
+};
+
 app.use(express.json());
 
 app.use(
@@ -346,92 +361,108 @@ app.get("/search-tasks/", authenticateToken, async (req, res) => {
 });
 
 // Add habit
-app.post("/add-habit", authenticateToken, async (req, res) => {
-  const { name, goal, repeat, color, notify } = req.body;
-  const { user } = req.user;
+app.post(
+  "/add-habit",
+  authenticateToken,
+  validateHabitInput,
+  async (req, res) => {
+    const { name, goal, repeat, color, notify } = req.body;
+    const { user } = req.user;
 
-  if (!name) {
-    return res.status(400).json({ error: true, message: "Name is required" });
-  }
-
-  if (!goal) {
-    return res.status(400).json({ error: true, message: "Goal is required" });
-  }
-  if (!repeat) {
-    return res.status(400).json({ error: true, message: "Repeat is required" });
-  }
-
-  if (!notify) {
-    return res.status(400).json({ error: true, message: "Notify is required" });
-  }
-
-  try {
-    const habit = new Habit({
-      name,
-      goal,
-      repeat,
-      color,
-      notify,
-      progress: 0,
-      userId: user._id,
-    });
-
-    await habit.save();
-
-    return res.json({
-      error: false,
-      habit,
-      message: "Habit added successfully",
-    });
-  } catch (error) {
-    console.error("Error adding habit:", error);
-    return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
-    });
-  }
-});
-
-// Edit habit
-app.put("/edit-habit/:habitId", authenticateToken, async (req, res) => {
-  const habitId = req.params.habitId;
-  const { name, goal, repeat, color, notify } = req.body;
-  const { user } = req.user;
-
-  if (!name && !goal && !repeat && !color && !notify) {
-    return res
-      .status(400)
-      .json({ error: true, message: "No changes provided" });
-  }
-
-  try {
-    const habit = await Habit.findOne({ _id: habitId, userId: user._id });
-
-    if (!habit) {
-      return res.status(404).json({ error: true, message: "Habit not found" });
+    if (!name) {
+      return res.status(400).json({ error: true, message: "Name is required" });
     }
 
-    if (name) habit.name = name;
-    if (goal) habit.goal = goal;
-    if (repeat) habit.repeat = repeat;
-    if (color) habit.color = color;
-    if (notify) habit.notify = notify;
-    if (progress) habit.progress = progress;
+    if (!goal) {
+      return res.status(400).json({ error: true, message: "Goal is required" });
+    }
+    if (!repeat) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Repeat is required" });
+    }
 
-    await habit.save();
+    if (!notify) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Notify is required" });
+    }
 
-    return res.json({
-      error: false,
-      habit,
-      message: "Habit updated successfully",
-    });
-  } catch (error) {
-    console.error("Error editing habit:", error);
-    return res
-      .status(500)
-      .json({ error: true, message: "Internal Server Error" });
+    try {
+      const habit = new Habit({
+        name,
+        goal,
+        repeat,
+        color,
+        notify,
+        progress: 0,
+        userId: user._id,
+      });
+
+      await habit.save();
+
+      return res.json({
+        error: false,
+        habit,
+        message: "Habit added successfully",
+      });
+    } catch (error) {
+      console.error("Error adding habit:", error);
+      return res.status(500).json({
+        error: true,
+        message: "Internal Server Error",
+      });
+    }
   }
-});
+);
+
+// Edit habit
+app.put(
+  "/edit-habit/:habitId",
+  authenticateToken,
+  validateHabitInput,
+  async (req, res) => {
+    const habitId = req.params.habitId;
+    const { name, goal, repeat, color, notify } = req.body;
+    const { user } = req.user;
+
+    if (!name && !goal && !repeat && !color && !notify) {
+      return res
+        .status(400)
+        .json({ error: true, message: "No changes provided" });
+    }
+
+    try {
+      const habit = await Habit.findOne({ _id: habitId, userId: user._id });
+
+      if (!habit) {
+        return res
+          .status(404)
+          .json({ error: true, message: "Habit not found" });
+      }
+
+      if (name) habit.name = name;
+      if (goal) habit.goal = goal;
+      if (repeat) habit.repeat = repeat;
+      if (color) habit.color = color;
+      if (notify) habit.notify = notify;
+      if (progress) habit.progress = progress;
+
+      await habit.save();
+
+      return res.json({
+        error: false,
+        habit,
+        message: "Habit updated successfully",
+      });
+    } catch (error) {
+      console.error("Error editing habit:", error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Internal Server Error" });
+    }
+  }
+);
 
 // Get all habits
 app.get("/get-all-habits/", authenticateToken, async (req, res) => {

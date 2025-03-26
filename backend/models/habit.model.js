@@ -23,7 +23,7 @@ const habitSchema = new Schema({
   goal: { type: Number, default: 1 },
   color: { type: String, default: "#FFFFFF" },
   notify: {
-    type: String,
+    type: [String],
     match: /^([01]\d|2[0-3]):([0-5]\d)$/,
     required: true,
   }, // Time format HH:mm
