@@ -16,26 +16,18 @@ import { format } from "date-fns";
 function formatDateToDesiredFormat(dateString) {
   const parsedDate = new Date(dateString);
   if (isNaN(parsedDate)) {
-<<<<<<< HEAD
     console.warn(
       `Invalid date string: ${dateString}, defaulting to 2025-01-01 00:00`
     );
-=======
->>>>>>> dae02dbb05d8f7b5c3ba394ca85bb5731e927695
     return "2025-01-01 00:00";
   }
   return format(parsedDate, "yyyy-MM-dd HH:mm");
 }
 
 function CalendarApp(props) {
-<<<<<<< HEAD
   // Initialize the event service plugin
   const [eventsService] = useState(() => createEventsServicePlugin());
   const [currentEventIds, setCurrentEventIds] = useState(new Set()); // Track event IDs
-=======
-  // Initialize the event service plugin separately
-  const eventsService = useState(() => createEventsServicePlugin())[0];
->>>>>>> dae02dbb05d8f7b5c3ba394ca85bb5731e927695
 
   // Create calendar instance
   const calendar = useCalendarApp({
@@ -65,7 +57,6 @@ function CalendarApp(props) {
 
   // Sync events with tasks whenever tasks change
   useEffect(() => {
-<<<<<<< HEAD
     if (!props.tasks || props.tasks.length === 0) {
       console.log("No tasks provided, removing all events.");
       currentEventIds.forEach((id) => {
@@ -135,31 +126,6 @@ function CalendarApp(props) {
     } catch (error) {
       console.error("Error syncing events with calendar:", error);
     }
-=======
-    if (!props.tasks || props.tasks.length === 0) return;
-
-    props.tasks.forEach((task, index) => {
-      const startdate = formatDateToDesiredFormat(
-        task.dueDate || "2025-03-25 08:00"
-      );
-      const enddate = formatDateToDesiredFormat(
-        task.dueDate || "2025-03-25 12:00"
-      );
-
-      const newEvent = {
-        id: String(index + 1),
-        title: task.title || "Untitled Event",
-        start: startdate,
-        end: enddate,
-        calendarId: "personal",
-      };
-
-      console.log("Adding event:", newEvent);
-
-      // Add to calendar
-      eventsService.add(newEvent);
-    });
->>>>>>> dae02dbb05d8f7b5c3ba394ca85bb5731e927695
   }, [props.tasks, eventsService]);
 
   return (
@@ -168,16 +134,7 @@ function CalendarApp(props) {
     </div>
   );
 }
-CalendarApp.propTypes = {
-  tasks: PropTypes.arrayOf(
-    PropTypes.shape({
-      dueDate: PropTypes.string,
-      title: PropTypes.string,
-    })
-  ),
-};
 
-<<<<<<< HEAD
 CalendarApp.propTypes = {
   tasks: PropTypes.arrayOf(
     PropTypes.shape({
@@ -188,6 +145,4 @@ CalendarApp.propTypes = {
   ),
 };
 
-=======
->>>>>>> dae02dbb05d8f7b5c3ba394ca85bb5731e927695
 export default CalendarApp;
