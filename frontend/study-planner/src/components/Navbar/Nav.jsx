@@ -15,7 +15,7 @@ const Nav = () => {
       {/* <div className="sidebox"></div> */}
       <NavIcon to="/study-mode" icon={<FaReadme size="30"/>} text="Study Mode" />
       {/* <div className="sidebox"></div> */}
-      <NavIcon to="/chatbot" icon={<TbMessageChatbotFilled size="30"/>} text="Chatbot"/>
+      <NavIcon to="/detector" icon={<TbMessageChatbotFilled size="30"/>} text="Detector"/>
       {/* <div className="sidebox"></div> */}
     </div>
   );
