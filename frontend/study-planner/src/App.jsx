@@ -12,6 +12,7 @@ import CalendarPage from "./pages/Calendar/Calendar";
 import "./index.css";
 import Detector from "./pages/Detector/Detector"; 
 import Start from "./pages/Detector/Start";
+import Results from "./pages/Detector/Results";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/auth" element={<AuthContainer />} />
         <Route path="/detector" element={<Start />} />
         <Route path="/detector/questions" element={<Detector />} />
+        <Route path="/detector/questions/results" element={<Results />} />
         <Route path="/study-mode" element={<StudyMode />} />
 
       </Routes>
