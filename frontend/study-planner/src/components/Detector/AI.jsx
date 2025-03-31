@@ -7,7 +7,8 @@ const AIResponse = ({prompt}) => {
   useEffect(() => {
     const fetchAIResponse = async () => {
       try {
-        const ai = new GoogleGenAI({ apiKey: "AIzaSyAt5YGTs6AIHGKEwRJ13msihynp5W1h6P4" });
+        const apiKey = process.env.GEMINI_API_KEY; // Ensure you have this in your .env file
+        const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
           model: "gemini-2.0-flash",
           contents: "I don't understand this question. Could you give me an example so I can visualize? It should be short in 1 sentence. This is the question: " + prompt,
