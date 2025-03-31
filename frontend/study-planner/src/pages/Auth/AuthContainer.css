@@ -71,8 +71,21 @@
 }
 
 .quote-banner {
-    position: relative; /* Ensure it's positioned properly */
-    margin-top: -100px; /* Move it up */
-    font-size: 5rem;
-}
-
+    background-color: #1e293b;
+    color: white;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 4.1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    margin-top: -50px;   /* reduced top margin */
+    margin-bottom: 10px; /* optional spacing below */
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Rancho', cursive;
+    max-width: 100vw;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  

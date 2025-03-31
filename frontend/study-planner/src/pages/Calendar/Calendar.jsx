@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CalendarApp from "../../components/Calendar/Calendar";
 import Nav from "../../components/Navbar/Nav";
+import UniversalNavbar from "../../components/Navbar/UniversalNavbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import axiosInstance from "../../utils/axiosInstance";
 import Modal from "react-modal";
@@ -14,6 +15,7 @@ import Tooltip from "../../components/Tooltip/Tooltip";
 const CalendarPage = () => {
   const [tasks, setTasks] = useState([]);
   const [allHabits, setAllHabits] = useState([]);
+  const [userInfo, setUserInfo] = useState(null);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     type: "add",
@@ -99,7 +101,6 @@ const CalendarPage = () => {
     }
   };
 
-  // Habits related functions
   const getAllHabits = async () => {
     try {
       const response = await axiosInstance.get("/get-all-habits");
@@ -108,6 +109,17 @@ const CalendarPage = () => {
       }
     } catch {
       console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user");
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user);
+      }
+    } catch (err) {
+      console.error("Failed to fetch user info:", err);
     }
   };
 
@@ -159,18 +171,21 @@ const CalendarPage = () => {
   useEffect(() => {
     getAllTasks();
     getAllHabits();
+    getUserInfo();
   }, []);
 
   const incompleteTasks = tasks.filter((task) => !task.isCompleted);
   const completedTasks = tasks.filter((task) => task.isCompleted);
 
   return (
-    <div className="flex h-screen pt-15">
-      <div className="w-20">
-        <Nav />
-      </div>
+    <div className="relative h-screen font-[Times_New_Roman,serif]">
+      <UniversalNavbar userInfo={userInfo} pageTitle="Calendar" className="tracking-wide" />
+      <div className="flex pt-16 h-full">
+        <div className="w-20">
+          <Nav />
+        </div>
 
-      <div className="flex-1">
+      <div className="flex-1 py-15">
         <CalendarApp tasks={tasks} habits={allHabits} />
       </div>
 
@@ -378,6 +393,7 @@ const CalendarPage = () => {
         />
       </div>
     </div>
+  </div>
   );
 };
 

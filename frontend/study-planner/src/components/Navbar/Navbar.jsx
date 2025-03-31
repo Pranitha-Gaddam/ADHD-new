@@ -14,10 +14,9 @@ const Navbar = ({
 
   const navigate = useNavigate();
 
-  // Navigate to the login page when the user clicked the Logout button
   const onLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/auth");
   };
 
   const handleSearch = () => {
@@ -32,8 +31,11 @@ const Navbar = ({
   };
 
   return (
-    <div className="fixed top-0 w-screen bg-white flex items-center justify-between px-6 py-2 drop-shadow z-40">
-      <h2 className="text-xl font-medium text-black py-2">Study Planner</h2>
+    <div className="fixed top-0 w-screen bg-slate-800 flex items-center justify-between px-6 py-2 drop-shadow z-40 ">
+      <div className="flex items-center">
+        <img src="/favicon.png" alt="Logo" className="w-8 h-8 mr-2" />
+        <h2 className="text-2xl font-bold text-white py-2 tracking-wide font-[Quintessential]">ADHD Study Planner</h2>
+      </div>
 
       {showSearchBar && (
         <SearchBar
@@ -46,7 +48,9 @@ const Navbar = ({
         />
       )}
 
-      <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+      <div className="text-white">
+        <ProfileInfo userInfo={userInfo} onLogout={onLogout} className="text-white" />
+      </div>
     </div>
   );
 };

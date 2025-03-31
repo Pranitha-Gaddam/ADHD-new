@@ -3,6 +3,8 @@ import { FaRedo, FaCog } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Nav from "../Navbar/Nav";
+import UniversalNavbar from "../../components/Navbar/UniversalNavbar";
+import axiosInstance from "../../utils/axiosInstance";
 
 const DEFAULT_TIMES = {
   Pomodoro: 25 * 60,
@@ -15,6 +17,22 @@ const StudyMode = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState("Pomodoro");
   const [sessions, setSessions] = useState(0);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axiosInstance.get("/get-user");
+        if (response.data && response.data.user) {
+          setUserInfo(response.data.user);
+        }
+      } catch (err) {
+        console.error("Failed to fetch user info:", err);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -70,55 +88,54 @@ const StudyMode = () => {
 
   return (
     <div className="flex h-screen">
+      <UniversalNavbar userInfo={userInfo} pageTitle="Study Mode" />
       <div className="w-20">
         <Nav />
       </div>
-    
-      <div className="flex-1 flex pt-16 bg-black flex-col items-center justify-center h-full w-screen text-white studymode">
-      
-      <div className="flex space-x-4 mb-6 ">
-        {["Pomodoro", "Short Break", "Long Break"].map((item) => (
+
+      <div className="flex-1 flex pt-16 bg-black flex-col items-center justify-center h-full text-white studymode">
+        <div className="flex space-x-4 mb-6">
+          {["Pomodoro", "Short Break", "Long Break"].map((item) => (
+            <button
+              key={item}
+              className={`px-5 py-2 font-semibold rounded-lg transition-all ${mode === item ? "bg-white text-white shadow-lg glass-effect" : "border border-neutral-300 text-white shadow-sm hover:shadow-md hover:bg-opacity-30"}`}
+              onClick={() => handleModeChange(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ width: 300, height: 300 }}>
+          <CircularProgressbar
+            value={percentage}
+            text={formatTime(time)}
+            styles={buildStyles({
+              textColor: "rgba(255, 255, 255, 1)",
+              pathColor: "rgba(255, 255, 255, 0.8)",
+              trailColor: "rgba(255, 255, 255, 0.5)",
+              pathTransitionDuration: 0.5,
+              textSize: "25px",
+            })}
+          />
+        </div>
+
+        <div className="mt-6 flex items-center space-x-4">
           <button
-            key={item}
-            className={`px-5 py-2 font-semibold rounded-lg transition-all ${mode === item ? "bg-white text-white shadow-lg glass-effect " : "border border-neutral-300 text-white shadow-sm hover:shadow-md hover:bg-opacity-30"}`}
-            onClick={() => handleModeChange(item)}
+            className="px-5 py-2 bg-white font-semibold rounded-lg transition-all glass-effect border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border"
+            onClick={toggleTimer}
           >
-            {item}
+            {isRunning ? "Pause" : "Start"}
           </button>
-        ))}
-      </div>
-
-      <div style={{ width: 300, height: 300 }}>
-        <CircularProgressbar
-          value={percentage}
-          text={formatTime(time)}
-          styles={buildStyles({
-            textColor: "rgba(255, 255, 255, 1)",
-            pathColor: "rgba(255, 255, 255, 0.8)",
-            trailColor: "rgba(255, 255, 255, 0.5)",
-            pathTransitionDuration: 0.5,
-            textSize: "25px",
-          })}
-        />
-      </div>
-
-      <div className="mt-6 flex items-center space-x-4">
-        <button
-          className="px-5 py-2 bg-white font-semibold rounded-lg transition-all glass-effect border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border"
-          onClick={toggleTimer}
-        >
-          {isRunning ? "Pause" : "Start"}
-        </button>
-        <button className="text-white opacity-60 hover:opacity-80" onClick={resetTimer}>
-          <FaRedo size={18} />
-        </button>
-        <button className="text-white opacity-60 hover:opacity-80" onClick={() => setIsRunning(false)}>
-          <FaCog size={24} />
-        </button>
+          <button className="text-white opacity-60 hover:opacity-80" onClick={resetTimer}>
+            <FaRedo size={18} />
+          </button>
+          <button className="text-white opacity-60 hover:opacity-80" onClick={() => setIsRunning(false)}>
+            <FaCog size={24} />
+          </button>
+        </div>
       </div>
     </div>
-    </div>
-    
   );
 };
 

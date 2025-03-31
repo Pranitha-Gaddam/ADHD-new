@@ -3,16 +3,33 @@ import PropTypes from "prop-types";
 import { getInitials } from "../../utils/helper";
 
 const ProfileInfo = ({ userInfo, onLogout }) => {
+  const getInitials = (name) =>
+    name
+      .split(" ")
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("");
+
+  const capitalizeName = (name) =>
+    name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
   return (
     userInfo && (
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 flex items-center justify-center rounded-full text-slate-950 font-medium bg-slate-100">
+        <div
+          className="w-12 h-12 flex items-center justify-center rounded-full text-slate-950 font-medium bg-slate-100"
+          style={{ fontFamily: "Times New Roman, serif" }}
+        >
           {getInitials(userInfo.fullName)}
         </div>
-        <div>
-          <p className="text-sm font-medium">{userInfo.fullName}</p>
+        <div className="leading-tight" style={{ fontFamily: "Times New Roman, serif" }}>
+          <p className="text-base font-semibold text-white tracking-wide mb-0.5">
+            {capitalizeName(userInfo.fullName)}
+          </p>
           <button
-            className="text-sm text-slate-700 underline cursor-pointer"
+            className="text-sm underline cursor-pointer text-white tracking-wide"
             onClick={onLogout}
           >
             Logout
@@ -22,6 +39,7 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
     )
   );
 };
+
 ProfileInfo.propTypes = {
   userInfo: PropTypes.shape({
     fullName: PropTypes.string.isRequired,

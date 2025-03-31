@@ -1,5 +1,4 @@
-// filepath: c:\Users\thien\Downloads\ADHD-0324\ADHD-main\frontend\study-planner\src\pages\Home\Home.jsx
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd, MdCheck } from "react-icons/md";
@@ -11,13 +10,13 @@ import Toast from "../../components/ToastMessage/Toast";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
 import AddTaskImg from "../../assets/images/add_task.svg";
 import NoDataImg from "../../assets/images/no_task.svg";
-import GreetingCard from "../../components/GreetingCard/GreetingCard"; // Import the GreetingCard component
-import Habits from "../../components/Habits/Habits"; // Import the Habits component
+import GreetingCard from "../../components/GreetingCard/GreetingCard";
+import Habits from "../../components/Habits/Habits";
 import Nav from "../../components/Navbar/Nav";
 import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
-import Tooltip from "../../components/Tooltip/Tooltip"; // Import the Tooltip component
-import { parseISO, format } from "date-fns"; // Import parseISO and format from date-fns
+import Tooltip from "../../components/Tooltip/Tooltip";
+import { parseISO, format } from "date-fns";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -57,6 +56,7 @@ const Home = () => {
   const handleCloseToast = () => {
     setShowToastMsg({ isShown: false, message: "" });
   };
+
   const handleUpdateProgress = async (habit) => {
     if (habit.progress >= habit.goal) {
       showToastMessage("Progress cannot exceed the goal!", "error");
@@ -67,65 +67,44 @@ const Home = () => {
       const response = await axiosInstance.put(
         `/update-habit-progress/${habit._id}`,
         {
-          progress: habit.progress + 1, // Increment progress by 1
+          progress: habit.progress + 1,
         }
       );
 
       if (response.data && response.data.habit) {
         showToastMessage("Progress updated successfully!", "success");
-        getAllHabits(); // Refresh habits
+        getAllHabits();
       }
     } catch (error) {
       console.error("Error updating progress:", error.message);
       showToastMessage("Failed to update progress. Please try again.", "error");
     }
   };
+
   const checkDueDates = () => {
     const now = new Date();
-    const notificationThreshold = 15 * 60 * 1000; // 15 minutes before due date
-
-    console.log("Checking due dates at:", format(now, "yyyy-MM-dd HH:mm"));
-    console.log("Total tasks:", allTasks.length);
+    const notificationThreshold = 15 * 60 * 1000;
 
     allTasks.forEach((task) => {
-      console.log(`Task: ${task.title}, ID: ${task._id}`);
-      console.log("Due Date Raw:", task.dueDate);
-
       if (
         task.dueDate &&
         !task.isCompleted &&
         !notifiedTasks.includes(task._id)
       ) {
-        const dueDate = parseISO(task.dueDate); // Parse ISO string as UTC
+        const dueDate = parseISO(task.dueDate);
         const timeDifference = dueDate - now;
-
-        console.log(
-          `Due: ${format(dueDate, "yyyy-MM-dd HH:mm")}, Time Diff: ${(
-            timeDifference / 1000
-          ).toFixed(0)} seconds`
-        );
 
         if (timeDifference >= 0 && timeDifference <= notificationThreshold) {
           showToastMessage(
-            `Task "${task.title}" is due in 15 minutes! Due: ${format(
-              dueDate,
-              "yyyy-MM-dd HH:mm"
-            )}`,
+            `Task "${task.title}" is due in 15 minutes!`,
             "warning"
           );
           setNotifiedTasks((prev) => [...prev, task._id]);
-        } else {
-          console.log("Task not within 15-minute threshold");
         }
-      } else {
-        console.log(
-          "Task skipped: No due date, completed, or already notified"
-        );
       }
     });
   };
 
-  // Get user info
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -140,7 +119,6 @@ const Home = () => {
     }
   };
 
-  // Get all tasks
   const getAllTasks = async () => {
     try {
       const response = await axiosInstance.get("/get-all-tasks");
@@ -154,7 +132,6 @@ const Home = () => {
     }
   };
 
-  // Delete task
   const deleteTask = async (data) => {
     try {
       const response = await axiosInstance.delete(`/delete-task/${data._id}`);
@@ -164,17 +141,10 @@ const Home = () => {
         getAllTasks();
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        console.log("An unexpected error occurred. Please try again.");
-      }
+      console.log("An unexpected error occurred. Please try again.");
     }
   };
 
-  // Search for tasks
   const onSearchTask = async (query) => {
     try {
       const response = await axiosInstance.get("/search-tasks", {
@@ -228,7 +198,6 @@ const Home = () => {
     }
   };
 
-  // get all habits
   const getAllHabits = async () => {
     try {
       const response = await axiosInstance.get("/get-all-habits");
@@ -245,7 +214,6 @@ const Home = () => {
     getAllTasks();
   };
 
-  // Handle edit habit
   const handleEditHabit = (habitDetails) => {
     setOpenAddEditHabitModal({
       isShown: true,
@@ -254,7 +222,6 @@ const Home = () => {
     });
   };
 
-  // Delete habit
   const deleteHabit = async (data) => {
     const habitId = data._id;
     try {
@@ -264,13 +231,7 @@ const Home = () => {
         showToastMessage("Habit Deleted Successfully!", "delete");
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        console.log("An expected error occurred. Please try again.");
-      }
+      console.log("An expected error occurred. Please try again.");
     }
   };
 
@@ -280,8 +241,8 @@ const Home = () => {
     getAllHabits();
 
     const intervalId = setInterval(() => {
-      getAllTasks;
-    }, 60 * 1000); // Check due dates every minute.
+      getAllTasks();
+    }, 60 * 1000);
 
     return () => {
       clearInterval(intervalId);
@@ -293,105 +254,110 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col z-40">
-      <div className="h-35">
-        <Navbar
-          userInfo={userInfo}
-          onSearchTask={onSearchTask}
-          handleclearSearch={handleclearSearch}
-          showSearchBar={true}
-        />
-      </div>
+      <Navbar
+        userInfo={userInfo}
+        onSearchTask={onSearchTask}
+        handleclearSearch={handleclearSearch}
+        showSearchBar={true}
+      />
 
-      <div className="flex-1 flex flex-row">
-        {/* <Nav /> */}
+      <div className="flex-1 flex flex-row mt-20">
         <div className="w-20 ml-4">
           <Nav />
         </div>
 
-        <div className="flex-1">
-          {userInfo && <GreetingCard username={userInfo.fullName} />}{" "}
-          {/* Display the GreetingCard */}
-          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">My Tasks</h2>
-              <div className="relative group">
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
-                  onClick={() => {
-                    setOpenAddEditModal({
-                      isShown: true,
-                      type: "add",
-                      data: null,
-                    });
-                  }}
-                >
-                  <MdAdd className="text-white text-[20px]" />
-                </button>
-                <Tooltip text="Add Task" />
-              </div>
+        <div className="flex-1 px-4 py-12">
+          {userInfo && (
+            <div className="mt-4 mb-4">
+              <GreetingCard username={userInfo.fullName} />
             </div>
-            {incompleteTasks.length > 0 ? (
-              <div className="flex flex-col gap-4">
-                {incompleteTasks.map((item) => (
-                  <NoteCard
-                    key={item._id}
-                    title={item.title}
-                    content={item.content}
-                    tags={item.tags}
-                    dueDate={item.dueDate} // Ensure dueDate is passed here
-                    reminderTime={item.reminderTime} // Pass reminderTime here
-                    isPinned={item.isPinned}
-                    isCompleted={item.isCompleted}
-                    onEdit={() => handleEdit(item)}
-                    onDelete={() => deleteTask(item)}
-                    onPinNote={() => updateIsPinned(item)}
-                    onToggleComplete={() => updateIsCompleted(item)}
-                  />
-                ))}
+          )}
+
+          <div className="flex flex-col md:flex-row gap-6" style={{ fontFamily: 'Times New Roman, serif' }}>
+            <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-[48%]">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">My Tasks</h2>
+                <div className="relative group">
+                  <button
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600"
+                    onClick={() => {
+                      setOpenAddEditModal({
+                        isShown: true,
+                        type: "add",
+                        data: null,
+                      });
+                    }}
+                  >
+                    <MdAdd className="text-white text-[20px]" />
+                  </button>
+                  <Tooltip text="Add Task" />
+                </div>
               </div>
-            ) : (
-              <EmptyCard
-                imgSrc={isSearch ? NoDataImg : AddTaskImg}
-                message={
-                  isSearch
-                    ? `Oops! No tasks found matching your search.`
-                    : `Create your first task—whether it’s big or small, every step counts!`
-                }
-              />
-            )}
+              {incompleteTasks.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  {incompleteTasks.map((item) => (
+                    <NoteCard
+                      key={item._id}
+                      title={item.title}
+                      content={item.content}
+                      tags={item.tags}
+                      dueDate={item.dueDate}
+                      reminderTime={item.reminderTime}
+                      isPinned={item.isPinned}
+                      isCompleted={item.isCompleted}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => deleteTask(item)}
+                      onPinNote={() => updateIsPinned(item)}
+                      onToggleComplete={() => updateIsCompleted(item)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyCard
+                  imgSrc={isSearch ? NoDataImg : AddTaskImg}
+                  message={
+                    isSearch
+                      ? `Oops! No tasks found matching your search.`
+                      : `Create your first task—whether it’s big or small, every step counts!`
+                  }
+                />
+              )}
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-[48%]">
+              <h2 className="text-2xl font-bold mb-4">Completed Tasks</h2>
+              {completedTasks.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  {completedTasks.map((item) => (
+                    <NoteCard
+                      key={item._id}
+                      title={item.title}
+                      content={item.content}
+                      tags={item.tags}
+                      dueDate={item.dueDate}
+                      reminderTime={item.reminderTime}
+                      isPinned={item.isPinned}
+                      isCompleted={item.isCompleted}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => deleteTask(item)}
+                      onToggleComplete={() => updateIsCompleted(item)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyCard
+                  imgSrc={isSearch ? NoDataImg : AddTaskImg}
+                  message={
+                    isSearch
+                      ? `No completed tasks found.`
+                      : `Complete a task to see it here!`
+                  }
+                />
+              )}
+            </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
-            <h2 className="text-2xl font-bold mb-4">Completed Tasks</h2>
-            {completedTasks.length > 0 ? (
-              <div className="flex flex-col gap-4">
-                {completedTasks.map((item) => (
-                  <NoteCard
-                    key={item._id}
-                    title={item.title}
-                    content={item.content}
-                    tags={item.tags}
-                    dueDate={item.dueDate} // Ensure dueDate is passed here
-                    reminderTime={item.reminderTime} // Pass reminderTime here
-                    isPinned={item.isPinned}
-                    isCompleted={item.isCompleted}
-                    onEdit={() => handleEdit(item)}
-                    onDelete={() => deleteTask(item)}
-                    onToggleComplete={() => updateIsCompleted(item)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <EmptyCard
-                imgSrc={isSearch ? NoDataImg : AddTaskImg}
-                message={
-                  isSearch
-                    ? `No completed tasks found.`
-                    : `Complete a task to see it here!`
-                }
-              />
-            )}
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
+
+          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl" style={{ fontFamily: 'Times New Roman, serif' }}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold">Your Habits</h2>
               <div className="relative group">
@@ -444,14 +410,11 @@ const Home = () => {
               ))}
             </div>
           </div>
+
           <Modal
             isOpen={openAddEditHabitModal.isShown}
             onRequestClose={() => {}}
-            style={{
-              overlay: {
-                backgroundColor: "rgba(0,0,0,0.2)",
-              },
-            }}
+            style={{ overlay: { backgroundColor: "rgba(0,0,0,0.2)" } }}
             contentLabel=""
             className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow-scroll"
           >
@@ -459,11 +422,7 @@ const Home = () => {
               type={openAddEditHabitModal.type}
               habitData={openAddEditHabitModal.data}
               onClose={() => {
-                setOpenAddEditHabitModal({
-                  isShown: false,
-                  type: "add",
-                  data: null,
-                });
+                setOpenAddEditHabitModal({ isShown: false, type: "add", data: null });
               }}
               getAllHabits={getAllHabits}
               showToastMessage={showToastMessage}
@@ -477,11 +436,7 @@ const Home = () => {
         onRequestClose={() => {
           setOpenAddEditModal({ isShown: false, type: "add", data: null });
         }}
-        style={{
-          overlay: {
-            backgroundColor: "rgba(0,0,0,0.2)",
-          },
-        }}
+        style={{ overlay: { backgroundColor: "rgba(0,0,0,0.2)" } }}
         contentLabel=""
         className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-16 p-5 overflow-scroll"
       >
