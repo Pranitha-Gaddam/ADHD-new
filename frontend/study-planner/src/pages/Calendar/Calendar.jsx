@@ -178,7 +178,8 @@ const CalendarPage = () => {
   const completedTasks = tasks.filter((task) => task.isCompleted);
 
   return (
-    <div className="relative h-screen font-[Times_New_Roman,serif]">
+    
+    <div className="relative h-screen font-montserrat">
       <UniversalNavbar userInfo={userInfo} pageTitle="Calendar" className="tracking-wide" />
       <div className="flex pt-16 h-full">
         <div className="w-20">

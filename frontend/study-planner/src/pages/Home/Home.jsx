@@ -253,7 +253,7 @@ const Home = () => {
   const completedTasks = allTasks.filter((task) => task.isCompleted);
 
   return (
-    <div className="min-h-screen flex flex-col z-40">
+    <div className="min-h-screen flex flex-col z-40 font-montserrat">
       <Navbar
         userInfo={userInfo}
         onSearchTask={onSearchTask}
@@ -273,7 +273,7 @@ const Home = () => {
             </div>
           )}
 
-          <div className="flex flex-col md:flex-row gap-6" style={{ fontFamily: 'Times New Roman, serif' }}>
+          <div className="flex flex-col md:flex-row gap-6">
             <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-[48%]">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold">My Tasks</h2>
@@ -357,7 +357,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl" style={{ fontFamily: 'Times New Roman, serif' }}>
+          <div className="bg-white p-6 rounded-lg shadow-md mt-8 max-w-xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold">Your Habits</h2>
               <div className="relative group">
@@ -380,7 +380,7 @@ const Home = () => {
               {allHabits.map((item) => (
                 <div
                   key={item._id}
-                  className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md"
+                  className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md font-montserrat"
                 >
                   <Habits
                     name={item.name}

@@ -21,7 +21,7 @@ const GreetingCard = ({ username }) => {
   };
 
   return (
-    <div className="bg-white p-3 rounded-lg shadow-md inline-block" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="bg-white p-3 rounded-lg shadow-md inline-block font-montserrat">
       <h1 className="text-2xl font-bold text-slate-800">
         {`${getGreetingMessage()}, ${capitalizeName(username)}!`}
       </h1>

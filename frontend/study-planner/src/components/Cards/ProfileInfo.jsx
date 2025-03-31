@@ -24,7 +24,7 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
         >
           {getInitials(userInfo.fullName)}
         </div>
-        <div className="leading-tight" style={{ fontFamily: "Times New Roman, serif" }}>
+        <div className="leading-tight font-montserrat" >
           <p className="text-base font-semibold text-white tracking-wide mb-0.5">
             {capitalizeName(userInfo.fullName)}
           </p>

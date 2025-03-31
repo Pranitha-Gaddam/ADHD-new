@@ -71,7 +71,7 @@ function Detector() {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col font-[Times_New_Roman,serif]">
+    <div className="fixed inset-0 flex flex-col font-montserrat">
       {/* Background image layer */}
       <div className="absolute inset-0 z-0">
         <img

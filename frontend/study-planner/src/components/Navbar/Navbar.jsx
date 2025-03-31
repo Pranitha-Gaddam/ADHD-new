@@ -34,7 +34,7 @@ const Navbar = ({
     <div className="fixed top-0 w-screen bg-slate-800 flex items-center justify-between px-6 py-2 drop-shadow z-40 ">
       <div className="flex items-center">
         <img src="/favicon.png" alt="Logo" className="w-8 h-8 mr-2" />
-        <h2 className="text-2xl font-bold text-white py-2 tracking-wide font-[Quintessential]">ADHD Study Planner</h2>
+        <h2 className="text-2xl font-bold text-white py-2 tracking-wide font-montserrat">ADHD Study Planner</h2>
       </div>
 
       {showSearchBar && (

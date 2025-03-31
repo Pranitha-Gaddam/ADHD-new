@@ -15,7 +15,7 @@ const UniversalNavbar = ({ userInfo, pageTitle }) => {
     <div className="fixed top-0 w-screen bg-slate-800 flex items-center justify-between px-6 py-2 drop-shadow z-50">
       <div className="flex items-center">
         <img src="/favicon.png" alt="Logo" className="w-8 h-8 mr-2" />
-        <h2 className="text-2xl font-bold text-white py-2 tracking-wide font-[Quintessential]">
+        <h2 className="text-2xl font-bold text-white py-2 tracking-wide font-montserrat">
           {pageTitle}
         </h2>
       </div>
