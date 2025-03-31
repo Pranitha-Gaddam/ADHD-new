@@ -7,7 +7,8 @@ const AIResponse = ({prompt}) => {
   useEffect(() => {
     const fetchAIResponse = async () => {
       try {
-        const apiKey = process.env.GEMINI_API_KEY; // Ensure you have this in your .env file
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+        console.log("API Key:", apiKey); 
         const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
           model: "gemini-2.0-flash",
