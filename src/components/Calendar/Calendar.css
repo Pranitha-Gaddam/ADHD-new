@@ -1,9 +1,0 @@
-.sx-react-calendar-wrapper {
-  width: 100%;
-  height: 100%;
-
-  overflow: hidden; /* Prevents unintended scrolling */
-  position: relative !important;
-  top: auto !important;
-  bottom: auto !important;
-}
