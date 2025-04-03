@@ -3,8 +3,8 @@ import { FaRedo, FaCog } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Nav from "../Navbar/Nav";
-import UniversalNavbar from "../../components/Navbar/UniversalNavbar";
-import axiosInstance from "../../utils/axiosInstance";
+import TaskManager from "./TaskList";
+import BackgroundSelector from "./BackgroundSelector";
 
 const DEFAULT_TIMES = {
   Pomodoro: 25 * 60,
@@ -17,22 +17,11 @@ const StudyMode = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState("Pomodoro");
   const [sessions, setSessions] = useState(0);
-  const [userInfo, setUserInfo] = useState(null);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axiosInstance.get("/get-user");
-        if (response.data && response.data.user) {
-          setUserInfo(response.data.user);
-        }
-      } catch (err) {
-        console.error("Failed to fetch user info:", err);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
+  const [background, setBackground] = useState(() => localStorage.getItem("selectedBackground") || "images/backgrounds/1883de5bfee36b043b973bef00c561e0.gif");
+  const [durations, setDurations] = useState({ ...DEFAULT_TIMES });
+  const [tempDurations, setTempDurations] = useState({ ...DEFAULT_TIMES }); // Temporary state for timer settings
+  const [showSettings, setShowSettings] = useState(false);
+  const [autoTransition, setAutoTransition] = useState(true);
 
   useEffect(() => {
     let timer;
@@ -47,25 +36,23 @@ const StudyMode = () => {
   }, [isRunning, time]);
 
   const handleSessionEnd = () => {
-    if (mode === "Pomodoro") {
-      setSessions((prev) => prev + 1);
-      if ((sessions + 1) % 4 === 0) {
-        setMode("Long Break");
-        setTime(DEFAULT_TIMES["Long Break"]);
+    if (autoTransition) {
+      if (mode === "Pomodoro") {
+        setSessions(s => s + 1);
+        setMode((sessions + 1) % 4 === 0 ? "Long Break" : "Short Break");
       } else {
-        setMode("Short Break");
-        setTime(DEFAULT_TIMES["Short Break"]);
+        setMode("Pomodoro");
       }
+      setTime(durations[mode]);
     } else {
-      setMode("Pomodoro");
-      setTime(DEFAULT_TIMES.Pomodoro);
+      alert("Session ended. Choose to restart or move to the next mode.");
     }
     setIsRunning(false);
   };
 
   const handleModeChange = (newMode) => {
     setMode(newMode);
-    setTime(DEFAULT_TIMES[newMode]);
+    setTime(durations[newMode]);
     setIsRunning(false);
   };
 
@@ -74,7 +61,7 @@ const StudyMode = () => {
   };
 
   const resetTimer = () => {
-    setTime(DEFAULT_TIMES[mode]);
+    setTime(durations[mode]);
     setIsRunning(false);
   };
 
@@ -84,57 +71,107 @@ const StudyMode = () => {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  const percentage = ((DEFAULT_TIMES[mode] - time) / DEFAULT_TIMES[mode]) * 100;
+  const percentage = ((durations[mode] - time) / durations[mode]) * 100;
+
+  const handleBackgroundChange = (newBg) => {
+    setBackground(newBg);
+    localStorage.setItem("selectedBackground", newBg);
+  };
+
+  const saveSettings = () => {
+    setDurations({ ...tempDurations });  // Save the temporary settings to durations
+    setTime(tempDurations[mode]); // Reset time to match the updated setting
+    setShowSettings(false);
+  };
+
+  const resetSettings = () => {
+    setTempDurations({ ...DEFAULT_TIMES });
+    setAutoTransition(true);
+  };
 
   return (
-    <div className="flex h-screen">
-      <UniversalNavbar userInfo={userInfo} pageTitle="Study Mode" />
-      <div className="w-20">
-        <Nav />
+    <div className="relative flex bg-black flex-col items-center justify-center h-screen w-full text-white studymode"
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }}>
+      <Nav />
+
+      <div className="fixed top-2 right-6 flex gap-3">
+        <TaskManager />
       </div>
 
-      <div className="flex-1 flex pt-16 bg-black flex-col items-center justify-center h-full text-white studymode">
-        <div className="flex space-x-4 mb-6">
-          {["Pomodoro", "Short Break", "Long Break"].map((item) => (
-            <button
-              key={item}
-              className={`px-5 py-2 font-semibold rounded-lg transition-all ${mode === item ? "bg-white text-white shadow-lg glass-effect" : "border border-neutral-300 text-white shadow-sm hover:shadow-md hover:bg-opacity-30"}`}
-              onClick={() => handleModeChange(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-
-        <div style={{ width: 300, height: 300 }}>
-          <CircularProgressbar
-            value={percentage}
-            text={formatTime(time)}
-            styles={buildStyles({
-              textColor: "rgba(255, 255, 255, 1)",
-              pathColor: "rgba(255, 255, 255, 0.8)",
-              trailColor: "rgba(255, 255, 255, 0.5)",
-              pathTransitionDuration: 0.5,
-              textSize: "25px",
-            })}
-          />
-        </div>
-
-        <div className="mt-6 flex items-center space-x-4">
+      <div className="flex space-x-4 mb-6">
+        {["Pomodoro", "Short Break", "Long Break"].map((item) => (
           <button
-            className="px-5 py-2 bg-white font-semibold rounded-lg transition-all glass-effect border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border"
-            onClick={toggleTimer}
+            key={item}
+            className={`px-5 py-2 font-semibold rounded-lg transition-all ${
+              mode === item
+                ? "bg-white text-white shadow-lg glass-effect"
+                : "glass-effect-inactive border border-neutral-500 text-white shadow-sm hover:shadow-md hover:bg-opacity-30"
+            }`}
+            onClick={() => handleModeChange(item)}
           >
-            {isRunning ? "Pause" : "Start"}
+            {item}
           </button>
-          <button className="text-white opacity-60 hover:opacity-80" onClick={resetTimer}>
-            <FaRedo size={18} />
-          </button>
-          <button className="text-white opacity-60 hover:opacity-80" onClick={() => setIsRunning(false)}>
-            <FaCog size={24} />
-          </button>
+        ))}
+      </div>
+
+      <div style={{ width: 300, height: 300 }} className="timer rounded-full">
+        <CircularProgressbar
+          value={percentage}
+          text={formatTime(time)}
+          styles={buildStyles({
+            textColor: "rgba(255, 255, 255, 1)",
+            pathColor: "rgba(255, 255, 255, 0.6)",
+            trailColor: "rgba(255, 255, 255, 0.3)",
+            pathTransitionDuration: 0.5,
+            backgroundColor: "rgba(0,0,0, 0.4)",
+            textSize: "25px",
+          })}
+        />
+      </div>
+
+      <div className="mt-6 flex items-center space-x-4">
+        <button className="px-5 py-2 bg-white font-semibold rounded-lg transition-all glass-effect border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border" onClick={toggleTimer}>
+          {isRunning ? "Pause" : "Start"}
+        </button>
+        <button className="text-white opacity-80 hover:opacity-90 shadow-xl hover:rotate-15 active:rotate-90 hover:scale-110 transition-all ease-linear" onClick={resetTimer}>
+          <FaRedo size={18} />
+        </button>
+
+          {/* absolute top-full -right-3 bg-white shadow:md rounded-lg p-2 w-64 z-10 mt-3
+                before:absolute before:top-0 before:right-4 before:w-3 before:h-3 before:bg-white before:rotate-45 before:-translate-y-1/2 */}
+
+        <div className="relative">
+          <button onClick={() => setShowSettings(!showSettings)}><FaCog size={24} /></button>
+          {showSettings && (
+            <div className="absolute -left-0.5 top-9 shadow:md glass-effect text-white p-2 w-35 rounded-lg text-xs before:absolute before:top-0 before:left-2 before:w-3 before:h-3 before:bg-white/30 before:backdrop-blur-md before:rotate-45 before:-translate-y-1/2">
+              {Object.keys(tempDurations).map((key) => (
+                <div key={key} className="flex justify-between py-1">
+                  <span>{key}</span>
+                  <input 
+                    type="number" 
+                    value={tempDurations[key] / 60} 
+                    onChange={(e) => setTempDurations({ ...tempDurations, [key]: e.target.value * 60 })} 
+                    className="w-12 bg-gray-700 text-white p-1 -mt-1 rounded" 
+                  />
+                </div>
+              ))}
+              <div className="flex justify-between py-2">
+                <span>Auto Transition</span>
+                <input type="checkbox" checked={autoTransition} onChange={() => setAutoTransition(!autoTransition)} />
+              </div>
+              <div className="flex justify-end space-x-2 mt-3">
+                <button className="bg-slate-700 text-white hover:bg-gray-700 active:bg-gray-800 px-3 py-1 rounded transition-all" onClick={saveSettings}>Save</button>
+                <button className="bg-white text-black hover:bg-neutral-200 px-3 py-1 rounded transition-all active:bg-neutral-300" onClick={resetSettings}>Reset</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+      <BackgroundSelector background={background} setBackground={handleBackgroundChange} />
     </div>
   );
 };
