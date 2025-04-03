@@ -28,7 +28,18 @@ function Start() {
 
     fetchUserInfo();
   }, []);
-
+  {/* Task to do 
+      - Add description about the quiz from https://add.org/wp-content/uploads/2015/03/adhd-questionnaire-ASRS111.pdf or search more 
+      - Add description about the scoring system 
+        Score (0–18)	Interpretation
+            0–4	Low likelihood / Unlikely ADHD
+            5–8	Mild indication / Monitor symptoms
+            9–12	Moderate likelihood / Possible ADHD
+            13–15	High likelihood / Strong signs of ADHD
+            16–18	Very high likelihood / Clinical attention recommended
+      - Need to add this part 
+          "This is a screening suggestion, not a diagnosis. A licensed professional should always evaluate further."
+  */}
   return (
     <div className="fixed inset-0 flex flex-col font-montserrat">
       {/* Background image layer */}
