@@ -61,12 +61,12 @@ function Start() {
 
         {/* Main Content */}
         <div className="flex-1 flex items-center justify-center px-4">
-          <div className="w-full h-auto flex flex-col justify-center bg-white/90 rounded-3xl shadow-xl text-left p-10 pt-4">
-          <div>
-          <b>Welcome!</b> This questionnaire is based on the <b>Adult ADHD Self-Report Scale (ASRS v1.1)</b> developed by the World Health Organization (WHO) and leading ADHD researchers. 
-            It contains <b>18 questions</b> designed to help screen for signs of <b>Attention-Deficit/Hyperactivity Disorder (ADHD)</b> in adults. 
-            These questions reflect common experiences and behaviors associated with ADHD. Your responses can help you understand whether your symptoms may align with those of ADHD.
-          </div>
+          <div className="w-full h-auto flex flex-col justify-center bg-white/90 rounded-3xl shadow-xl text-left p-10 mt-20">
+            <div>
+            <b>Welcome!</b> This questionnaire is based on the <b>Adult ADHD Self-Report Scale (ASRS v1.1)</b> developed by the World Health Organization (WHO) and leading ADHD researchers. 
+              It contains <b>18 questions</b> designed to help screen for signs of <b>Attention-Deficit/Hyperactivity Disorder (ADHD)</b> in adults. 
+              These questions reflect common experiences and behaviors associated with ADHD. Your responses can help you understand whether your symptoms may align with those of ADHD.
+            </div>
             <br/>
             <p><b>⚠️ Important Note</b></p>
             <p>This is a screening tool, not a diagnosis. A licensed mental health professional should always be consulted for a full evaluation and diagnosis.</p>
@@ -103,17 +103,17 @@ function Start() {
                 </tr>
               </tbody>
             </table>
+            <br/>
             <p className="text-xl font-bold text-gray-800 mb-6">
               Click the button below to start your ADHD self-check.
             </p>
-            <div>
+            <div className="flex justify-center mt-0">
               <button
                 onClick={handleStart}
                 className="px-6 py-3 w-auto h-auto bg-slate-800 text-white rounded-lg font-semibold text-lg hover:bg-slate-900 shadow-md">
                 Start Detector
               </button>
             </div>
-            
           </div>
         </div>
       </div>
