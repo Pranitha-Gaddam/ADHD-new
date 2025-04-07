@@ -143,9 +143,7 @@ const StudyMode = () => {
 
           {/* absolute top-full -right-3 bg-white shadow:md rounded-lg p-2 w-64 z-10 mt-3
                 before:absolute before:top-0 before:right-4 before:w-3 before:h-3 before:bg-white before:rotate-45 before:-translate-y-1/2 */}
-
-        <div className="relative">
-          <button onClick={() => setShowSettings(!showSettings)}><FaCog size={24} /></button>
+          <button className="text-white opacity-80 hover:opacity-90 shadow-xl hover:rotate-15 active:rotate-90 hover:scale-110 transition-all ease-linear" onClick={() => setShowSettings(!showSettings)}><FaCog size={24} /></button>
           {showSettings && (
             <div className="absolute -left-0.5 top-9 shadow:md glass-effect text-white p-2 w-35 rounded-lg text-xs">
               {Object.keys(tempDurations).map((key) => (
@@ -157,7 +155,6 @@ const StudyMode = () => {
                     onChange={(e) => setTempDurations({ ...tempDurations, [key]: e.target.value * 60 })} 
                     className="w-12 bg-gray-700 text-white p-1 -mt-1 rounded" 
                   />
-                </div>
               ))}
               <div className="flex justify-between py-2">
                 <span>Auto Transition</span>
