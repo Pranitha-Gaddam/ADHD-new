@@ -133,7 +133,7 @@ const StudyMode = () => {
         />
       </div>
 
-      <div className="mt-6 flex items-center space-x-4">
+      <div className="mt-6 flex items-center space-x-4 relative">
         <button className="px-5 py-2 bg-white font-semibold rounded-lg transition-all glass-effect border-white text-white shadow-sm hover:shadow-md backdrop-filter backdrop-blur-lg bg-opacity-15 border" onClick={toggleTimer}>
           {isRunning ? "Pause" : "Start"}
         </button>
@@ -145,7 +145,7 @@ const StudyMode = () => {
                 before:absolute before:top-0 before:right-4 before:w-3 before:h-3 before:bg-white before:rotate-45 before:-translate-y-1/2 */}
           <button className="text-white opacity-80 hover:opacity-90 shadow-xl hover:rotate-15 active:rotate-90 hover:scale-110 transition-all ease-linear" onClick={() => setShowSettings(!showSettings)}><FaCog size={24} /></button>
           {showSettings && (
-            <div className="absolute -left-0.5 top-9 shadow:md glass-effect text-white p-2 w-35 rounded-lg text-xs">
+            <div className="absolute left-0 top-full mt-2 shadow:md glass-effect text-white p-2 w-35 rounded-lg text-xs">
               {Object.keys(tempDurations).map((key) => (
                 <div key={key} className="flex justify-between py-1">
                   <span>{key}</span>
