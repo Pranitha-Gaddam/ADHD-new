@@ -147,7 +147,7 @@ const StudyMode = () => {
         <div className="relative">
           <button onClick={() => setShowSettings(!showSettings)}><FaCog size={24} /></button>
           {showSettings && (
-            <div className="absolute -left-0.5 top-9 shadow:md glass-effect text-white p-2 w-35 rounded-lg text-xs before:absolute before:top-0 before:left-2 before:w-3 before:h-3 before:bg-white/30 before:backdrop-blur-md before:rotate-45 before:-translate-y-1/2">
+            <div className="absolute -left-0.5 top-9 shadow:md glass-effect text-white p-2 w-35 rounded-lg text-xs">
               {Object.keys(tempDurations).map((key) => (
                 <div key={key} className="flex justify-between py-1">
                   <span>{key}</span>
