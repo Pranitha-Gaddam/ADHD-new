@@ -24,9 +24,7 @@ const BackgroundSelector = ({ background, setBackground }) => {
 
       {/* Background Dropdown */}
       {showDropdown && (
-        <div className="absolute bottom-16 right-0 bg-white glass-effect shadow-lg rounded-lg p-1 flex flex-wrap gap-2 w-45
-        before:absolute before:top-full before:right-4 before:w-3 before:h-3 before:rotate-45 before:-translate-y-1/2 
-        before:bg-white/30 before:backdrop-blur-md before:border-<0.5> before:border-white before:shadow-lg">
+        <div className="absolute bottom-16 right-0 bg-white glass-effect shadow-lg rounded-lg p-1 flex flex-wrap gap-2 w-45">
     
     
           {backgrounds.map((bg) => (
