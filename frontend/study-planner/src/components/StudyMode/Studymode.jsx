@@ -155,6 +155,7 @@ const StudyMode = () => {
                     onChange={(e) => setTempDurations({ ...tempDurations, [key]: e.target.value * 60 })} 
                     className="w-12 bg-gray-700 text-white p-1 -mt-1 rounded" 
                   />
+                  </div>
               ))}
               <div className="flex justify-between py-2">
                 <span>Auto Transition</span>
@@ -166,7 +167,6 @@ const StudyMode = () => {
               </div>
             </div>
           )}
-        </div>
       </div>
       <BackgroundSelector background={background} setBackground={handleBackgroundChange} />
     </div>
