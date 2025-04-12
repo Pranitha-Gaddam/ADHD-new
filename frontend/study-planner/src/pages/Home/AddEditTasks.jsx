@@ -74,9 +74,7 @@ const AddEditTasks = ({
   // Edit Task
   const editTask = async () => {
     try {
-      const formattedDueDate = dueDate
-        ? format(dueDate, "yyyy-MM-dd HH:mm")
-        : null;
+      const formattedDueDate = dueDate ? dueDate.toISOString() : null; // Convert to UTC
       const response = await axiosInstance.put(`/edit-task/${noteData._id}`, {
         title: title,
         content: content,
