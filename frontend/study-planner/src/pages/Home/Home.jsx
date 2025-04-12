@@ -17,12 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import AddEditHabits from "../../components/Habits/AddEditHabits";
 import Tooltip from "../../components/Tooltip/Tooltip";
 import { parseISO, format } from "date-fns";
-import {
-  requestNotificationPermission,
-  onMessageListener,
-} from "../../firebase";
-
-import axios from "axios";
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
