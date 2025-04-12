@@ -266,7 +266,6 @@ const Home = () => {
     getUserInfo();
     getAllHabits();
 
-    requestNotificationPermission();
 
     const intervalId = setInterval(() => {
       getAllTasks();
