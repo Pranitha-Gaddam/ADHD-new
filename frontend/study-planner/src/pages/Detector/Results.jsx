@@ -26,6 +26,16 @@ function Results() {
                 <h1 className="text-3xl font-bold mb-4 text-center">ADHD Detector Results</h1>
                 <p className="text-center">Your score is: {score}</p>
                 {/* Add more details about the results here */}
+                <div className="mt-4 text-center">
+                    {score <= 4 && <p>You are unlikely to have ADHD.</p>}
+                    {score <= 8 && score > 4 && <p>You have a mild indication of ADHD. Monitor your symptoms.</p>}
+                    {score <= 12 && score > 8 && <p>You have a moderate likelihood of having ADHD.</p>}
+                    {score <= 15 && score > 12 && <p>You have a high likelihood of having ADHD.</p>}
+                    {score > 15 && <p>You have a very high likelihood of having ADHD. Clinical attention is recommended.</p>}
+                </div>
+                <div className="mt-4 text-center">
+                    <p>This is a screening suggestion, not a diagnosis. A licensed professional should always evaluate further.</p>
+                </div>
             </div>
         </div>
     );

@@ -44,19 +44,17 @@ const AddEditTasks = ({
   // Add Task
   const addNewTask = async () => {
     try {
-      const formattedDueDate = dueDate
-        ? format(dueDate, "yyyy-MM-dd HH:mm")
-        : null;
+      const formattedDueDate = dueDate ? dueDate.toISOString() : null; // Convert to UTC
       const response = await axiosInstance.post("/add-task", {
         title: title,
         content: content,
         tags: tags,
         dueDate: formattedDueDate,
-        //  reminderTime: reminderTime,
+        // reminderTime: reminderTime,
       });
 
       if (response.data && response.data.task) {
-        console.log("Task added with due date:", formattedDueDate); // Log the formatted due date
+        console.log("Task added with due date (UTC):", formattedDueDate); // Log the UTC due date
         showToastMessage("Task added successfully");
         getAllTasks();
         onClose();
@@ -76,9 +74,7 @@ const AddEditTasks = ({
   // Edit Task
   const editTask = async () => {
     try {
-      const formattedDueDate = dueDate
-        ? format(dueDate, "yyyy-MM-dd HH:mm")
-        : null;
+      const formattedDueDate = dueDate ? dueDate.toISOString() : null; // Convert to UTC
       const response = await axiosInstance.put(`/edit-task/${noteData._id}`, {
         title: title,
         content: content,

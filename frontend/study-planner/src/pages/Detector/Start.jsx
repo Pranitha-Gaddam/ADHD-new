@@ -45,7 +45,6 @@ function Start() {
       {/* Background image layer */}
       <div className="absolute inset-0 z-0">
         <img
-          src={bgImage}
           alt="Background"
           className="w-full h-full object-cover opacity-50"
         />
@@ -62,17 +61,59 @@ function Start() {
 
         {/* Main Content */}
         <div className="flex-1 flex items-center justify-center px-4">
-          <div className="w-full max-w-2xl p-10 bg-white/90 rounded-3xl shadow-xl text-center">
-            
+          <div className="w-full h-auto flex flex-col justify-center bg-white/90 rounded-3xl shadow-xl text-left p-10 mt-20">
+            <div>
+            <b>Welcome!</b> This questionnaire is based on the <b>Adult ADHD Self-Report Scale (ASRS v1.1)</b> developed by the World Health Organization (WHO) and leading ADHD researchers. 
+              It contains <b>18 questions</b> designed to help screen for signs of <b>Attention-Deficit/Hyperactivity Disorder (ADHD)</b> in adults. 
+              These questions reflect common experiences and behaviors associated with ADHD. Your responses can help you understand whether your symptoms may align with those of ADHD.
+            </div>
+            <br/>
+            <p><b>⚠️ Important Note</b></p>
+            <p>This is a screening tool, not a diagnosis. A licensed mental health professional should always be consulted for a full evaluation and diagnosis.</p>
+            <br/>
+            <p><b>How Scoring Works</b></p>
+            <p>Your total score will range from <b>0 to 18</b>, where higher scores suggest more frequent symptoms of ADHD.</p>
+            <table class="table-auto">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="px-4 py-2">Score Range</th>
+                  <th className="px-4 py-2">Interpretation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  <td className="px-4 py-2">0–4</td>
+                  <td className="px-4 py-2">Low likelihood / Unlikely ADHD</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2">5–8</td>
+                  <td className="px-4 py-2">Mild indication / Monitor symptoms</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2">9–12</td>
+                  <td className="px-4 py-2">Moderate likelihood / Possible ADHD</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2">13–15</td>
+                  <td className="px-4 py-2">High likelihood / Strong signs of ADHD</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="px-4 py-2">16–18</td>
+                  <td className="px-4 py-2">Very high likelihood / Clinical attention recommended</td>
+                </tr>
+              </tbody>
+            </table>
+            <br/>
             <p className="text-xl font-bold text-gray-800 mb-6">
               Click the button below to start your ADHD self-check.
             </p>
-            <button
-              onClick={handleStart}
-              className="px-6 py-3 bg-slate-800 text-white rounded-lg font-semibold text-lg hover:bg-slate-900 shadow-md"
-            >
-              Start Detector
-            </button>
+            <div className="flex justify-center mt-0">
+              <button
+                onClick={handleStart}
+                className="px-6 py-3 w-auto h-auto bg-slate-800 text-white rounded-lg font-semibold text-lg hover:bg-slate-900 shadow-md">
+                Start Detector
+              </button>
+            </div>
           </div>
         </div>
       </div>

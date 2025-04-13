@@ -15,6 +15,7 @@ import CalendarPage from "./pages/Calendar/Calendar";
 import Detector from "./pages/Detector/Detector";
 import Start from "./pages/Detector/Start";
 import Results from "./pages/Detector/Results";
+import FocusMode from "./pages/FocusMode/FocusMode";
 
 import "./index.css";
 
@@ -33,6 +34,8 @@ const AnimatedRoutes = () => {
         <Route path="/detector/questions" element={<Detector />} />
         <Route path="/detector/questions/results" element={<Results />} />
         <Route path="/study-mode" element={<StudyMode />} />
+        <Route path="/focus-mode" element={<FocusMode />} />
+
       </Routes>
     </AnimatePresence>
   );

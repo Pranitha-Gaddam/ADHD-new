@@ -1,9 +1,12 @@
 import axios from "axios";
 import { BASE_URL } from "./constants";
 
+console.log("BASE_URL:", BASE_URL); // Log the BASE_URL value
+
 // Create an Axios instance with default settings
 const axiosInstance = axios.create({
-  baseURL: BASE_URL, // Base URL for all requests
+  baseURL: BASE_URL,
+
   timeout: 10000, // Timeout for requests (10 seconds)
   headers: {
     "Content-Type": "application/json", // Default content type for requests
@@ -24,4 +27,20 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-export default axiosInstance; // Export the Axios instance for use in other parts of the application
+// Method to check the server connection and log the URL it's connecting to
+const checkConnection = async () => {
+  try {
+    console.log(`Attempting to connect to: ${BASE_URL}`); // Log the URL
+    const response = await axiosInstance.get("/"); // Test with root endpoint
+    console.log("Server is reachable:", response.data); // Log response
+    return true;
+  } catch (error) {
+    console.error("Error connecting to the server:", error);
+    return false;
+  }
+};
+
+checkConnection();
+
+export { checkConnection }; // Export checkConnection separately
+export default axiosInstance; // Export axiosInstance as the default export

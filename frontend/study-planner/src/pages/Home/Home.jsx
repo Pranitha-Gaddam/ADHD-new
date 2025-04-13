@@ -83,28 +83,54 @@ const Home = () => {
 
   const checkDueDates = () => {
     const now = new Date();
-    const notificationThreshold = 15 * 60 * 1000;
+    const notificationThreshold = 15 * 60 * 1000; // 15 minutes before due date
+
+    console.log("Checking due dates at:", now.toLocaleTimeString());
+    console.log("Total tasks:", allTasks.length);
 
     allTasks.forEach((task) => {
-      if (
-        task.dueDate &&
-        !task.isCompleted &&
-        !notifiedTasks.includes(task._id)
-      ) {
-        const dueDate = parseISO(task.dueDate);
+      console.log(`Task: ${task.title}, ID: ${task._id}`);
+      console.log("Due Date Raw:", task.dueDate);
+
+      if (task.dueDate) {
+        const dueDate = new Date(task.dueDate); // Parse the due date
+
+        // Debug logs for local and UTC representations
+        console.log("Due Date (Local):", dueDate.toString());
+        console.log("Due Date (UTC):", dueDate.toISOString());
+
         const timeDifference = dueDate - now;
 
-        if (timeDifference >= 0 && timeDifference <= notificationThreshold) {
+        console.log(
+          `Due: ${format(dueDate, "yyyy-MM-dd HH:mm:ss")}, Time Diff: ${(
+            timeDifference / 1000
+          ).toFixed(0)} seconds`
+        );
+
+        if (
+          timeDifference >= 0 &&
+          timeDifference <= notificationThreshold &&
+          !task.isCompleted &&
+          !notifiedTasks.includes(task._id)
+        ) {
           showToastMessage(
-            `Task "${task.title}" is due in 15 minutes!`,
+            `Task "${task.title}" is due in 15 minutes! Due: ${format(
+              dueDate,
+              "yyyy-MM-dd HH:mm:ss"
+            )}`,
             "warning"
           );
           setNotifiedTasks((prev) => [...prev, task._id]);
+        } else {
+          console.log("Task not within 15-minute threshold");
         }
+      } else {
+        console.log(
+          "Task skipped: No due date, completed, or already notified"
+        );
       }
     });
   };
-
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -240,13 +266,12 @@ const Home = () => {
     getUserInfo();
     getAllHabits();
 
+
     const intervalId = setInterval(() => {
       getAllTasks();
     }, 60 * 1000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   const incompleteTasks = allTasks.filter((task) => !task.isCompleted);
@@ -301,7 +326,10 @@ const Home = () => {
                       title={item.title}
                       content={item.content}
                       tags={item.tags}
-                      dueDate={item.dueDate}
+                      dueDate={format(
+                        new Date(item.dueDate),
+                        "yyyy-MM-dd HH:mm"
+                      )} // Convert to local time
                       reminderTime={item.reminderTime}
                       isPinned={item.isPinned}
                       isCompleted={item.isCompleted}
@@ -422,7 +450,11 @@ const Home = () => {
               type={openAddEditHabitModal.type}
               habitData={openAddEditHabitModal.data}
               onClose={() => {
-                setOpenAddEditHabitModal({ isShown: false, type: "add", data: null });
+                setOpenAddEditHabitModal({
+                  isShown: false,
+                  type: "add",
+                  data: null,
+                });
               }}
               getAllHabits={getAllHabits}
               showToastMessage={showToastMessage}

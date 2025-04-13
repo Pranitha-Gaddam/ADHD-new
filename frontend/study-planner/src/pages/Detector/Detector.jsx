@@ -75,7 +75,6 @@ function Detector() {
       {/* Background image layer */}
       <div className="absolute inset-0 z-0">
         <img
-          src={bgImage}
           alt="Background"
           className="w-full h-full object-cover opacity-50"
         />

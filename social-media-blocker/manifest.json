@@ -6,8 +6,7 @@
     "permissions": [
       "declarativeNetRequest",
       "declarativeNetRequestWithHostAccess",
-      "activeTab",
-      "storage"
+      "activeTab"
     ],
     "host_permissions": [
       "*://*.facebook.com/*",
@@ -29,7 +28,7 @@
     },
     "web_accessible_resources": [
       {
-        "resources": ["error.html"],
+        "resources": ["error.html", "meme.jpg"],
         "matches": ["<all_urls>"]
       }
     ],
